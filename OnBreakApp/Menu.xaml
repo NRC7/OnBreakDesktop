@@ -1,0 +1,29 @@
+﻿<Controls:MetroWindow x:Class="OnBreakApp.Menu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:local="clr-namespace:OnBreakApp"
+        mc:Ignorable="d"
+        Title="OnBreak - Eventos Empresariales" Background="Black" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <!-- NAVBAR -->
+        <Image HorizontalAlignment="Left" Height="135" Margin="60,25,0,0" VerticalAlignment="Top" Width="215" Stretch="Fill" Source="Images/logo.png"/>
+        <Label Margin="280,10,510,0" VerticalAlignment="Top" Background="White" Width="2.5" Height="150"/>
+        <Label Content="Eventos Empresariales" HorizontalAlignment="Center" Margin="300,45,305,0" VerticalAlignment="Top" Background="{x:Null}" Width="189" Foreground="White" HorizontalContentAlignment="Center" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Más de 20 años entregando servicios gastronomicos" HorizontalAlignment="Center" Margin="300,100,39,0" VerticalAlignment="Top" Background="{x:Null}" Width="455" Foreground="White" HorizontalContentAlignment="Center" FontSize="18" FontWeight="Bold"/>
+        
+        <!-- ACCIONES -->
+        <!-- FILA SUPERIOR -->
+        <Button Foreground="White" Content="Admin. Clientes" HorizontalAlignment="Left" Margin="60,185,0,0" VerticalAlignment="Top" Width="215" Height="135" Background="#FF7C54C3" FontSize="16" FontWeight="Normal" BorderBrush="#FF7C54C3" Click="Button_Click_AdminClientes"/>
+        <Button Foreground="White" Content="Listado Clientes" HorizontalAlignment="Left" Margin="300,185,0,0" VerticalAlignment="Top" Width="215" Height="135" Background="#FF76BF43" FontSize="16" FontWeight="Normal" BorderBrush="#FF76BF43" Click="Button_Click_ListadoClientes"/>
+        <Button Foreground="White" Content="Admin. Contratos" HorizontalAlignment="Left" Margin="540,185,0,0" VerticalAlignment="Top" Width="200" Height="135" Background="#FFDE9348" FontSize="16" FontWeight="Normal" BorderBrush="#FFDE9348" Click="Button_Click_AdminContratos"/>
+        <!-- FILA INFERIOR -->
+        <Button Foreground="White" Content="Listado Contratos" HorizontalAlignment="Left" Margin="60,360,0,0" VerticalAlignment="Top" Width="215" Height="135" Background="#FFD369B6" FontSize="16" FontWeight="Normal" BorderBrush="#FFD369B6" Click="Button_Click_ListadoContratos"/>
+        <Button Foreground="White" Content="Configuración" HorizontalAlignment="Left" Margin="300,360,0,0" VerticalAlignment="Top" Width="215" Height="135" Background="#FFF7E425" FontSize="16" FontWeight="Normal" BorderBrush="#FFF7E425" Click="Button_Click_Configuracion"/>
+        <Button Foreground="White" Content="Ayuda" HorizontalAlignment="Left" Margin="540,360,0,0" VerticalAlignment="Top" Width="200" Height="135" Background="#FFDC4B2B" FontSize="16" FontWeight="Normal" BorderBrush="#FFDC4B2B" Click="Button_Click_Ayuda"/>
+    </Grid>
+</Controls:MetroWindow>
