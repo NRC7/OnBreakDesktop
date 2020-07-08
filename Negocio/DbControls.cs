@@ -11,25 +11,25 @@ namespace Negocio
     {
         private readonly Queries queries = new Queries();
 
-        /******************
-         *  CRUD CLIENTE  *
-         ******************/
+        /*****************
+         *    CLIENTE    *
+         *****************/
 
-        // FILTRAR CLIENTE ACTUALIZADO
+        // FILTRAR CLIENTE
         public DataTable FiltrarClientes(string rutCliente, string tipoEmpresa, string actividadEmpresa)
         {
             DataTable dataSet = new DataTable();
             queries.FiltrarRegistroClientes(rutCliente, tipoEmpresa, actividadEmpresa).Fill(dataSet);
             return dataSet;
         }
-        // LEER ACTUALIZADO
+        // OBTENER TODOS LOS CLIENTES
         public DataTable ObtenerClientes()
         {
             DataTable dataSet = new DataTable();
             queries.ConsultaRegistroClientes().Fill(dataSet);
             return dataSet;
         }
-        // BUSCAR ACTUALIZADO
+        // BUSCAR UN CLIENTE
         public Cliente BuscarCliente(string rut)
         {
             MySqlDataReader reader = queries.ConsultarCliente(rut);
@@ -38,6 +38,7 @@ namespace Negocio
                 reader.Read();
                 Cliente cliente = new Cliente()
                 {
+                    Id = reader.GetString(0),
                     Rut = rut,
                     Nombre = reader.GetString(2),
                     Apellido = reader.GetString(3),
@@ -53,7 +54,7 @@ namespace Negocio
             }
             return null;
         }
-        // ELIMINAR POR CLIENTE ACTUALIZADO
+        // ELIMINAR CLIENTE
         public bool EliminarCliente(Cliente cliente)
         {
             if (cliente != null && !VerificarContratosAsociados(cliente))
@@ -66,7 +67,7 @@ namespace Negocio
                 return false;
             }
         }
-        // ELIMINAR POR RUT ACTUALIZADO
+        // ELIMINAR CLIENTE POR RUT
         public bool EliminarCliente(string rut)
         {
             Cliente cliente = BuscarCliente(rut);
@@ -80,7 +81,7 @@ namespace Negocio
                 return false;
             }
         }
-        // VERIFICA SI UN CLIENTE TIENE ALGUN CONTRATO ASOCIADO ACTUALIZADO
+        // VERIFICA SI UN CLIENTE TIENE ALGUN CONTRATO ASOCIADO
         public bool VerificarContratosAsociados(Cliente cliente)
         {
             string asociado = cliente.Contrato;
@@ -95,7 +96,7 @@ namespace Negocio
             }
 
         }
-        // GUARDAR CLIENTE ACTUALIZADO
+        // GUARDAR CLIENTE
         public bool GuardarCliente(string rut, string nombre, string apellido, string direccion,
             string telefono, string email, string tipoEmpresa, string actividadEmpresa, string servicio)
         {
@@ -108,7 +109,7 @@ namespace Negocio
                 return false;
             }
         }
-        // VALIDAR QUE NUEVOS DATOS SEAN VALIDOS
+        // VALIDAR QUE NUEVOS DATOS INGRESADOS SEAN VALIDOS
         private Cliente ValidarCliente(string rut, string nombre, string apellido, string direccion,
             string telefono, string email, string tipoEmpresa, string actividadEmpresa, string servicio)
         {
@@ -156,12 +157,15 @@ namespace Negocio
 
             return cliente;
         }
-        // ACTUALIZAR CLIENTE ACTUALIZADO
+        // ACTUALIZAR UN CLIENTE
         public bool ActualizarCliente(string rut, string nombre, string apellido, string direccion,
             string telefono, string email, string tipoEmpresa, string actividadEmpresa, string servicio)
         {
-            if (queries.ActualizarRegistroCliente(rut, nombre, apellido, direccion,
-            telefono, email, tipoEmpresa, actividadEmpresa, servicio))
+            Cliente cliente = ValidarCliente(rut, nombre, apellido, direccion,
+            telefono, email, tipoEmpresa, actividadEmpresa, servicio);
+
+            if (queries.ActualizarRegistroCliente(cliente.Rut, cliente.Nombre, cliente.Apellido, cliente.Direccion,
+            cliente.Telefono, cliente.Email, cliente.TipoEmpresa, cliente.ActividadEmpresa, cliente.Servicio))
             {
                 return true;
             }
@@ -170,225 +174,72 @@ namespace Negocio
                 return false;
             }
         }
-
-
-
-        /****************
-        *  UTILITARIOS  *
-        *****************/
-
-
-
-
-
-        public string ObtenerIdCliente(string rut)
+        // OBTENER ID DE UN CLIENTE POR RUT
+        public int ObtenerIdCliente(string rut)
         {
-            string id = "";
-            MySqlConnection conexion = db.InitConection();
-
-            string consulta = "SELECT * FROM Cliente WHERE RUT = " + rut;
-
-            MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-
-            try
-            {
-                MySqlDataReader reader = cmd.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    reader.Read();
-                    id = reader.GetString(0);
-                }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Conexion interrumpida del id");
-            }
-            return id;
+            return int.Parse(BuscarCliente(rut).Id);
         }
 
 
+        /******************
+         *    CONTRATO    *
+         ******************/
 
-
-
-        /**************
-         *  CONTRATO  *
-         **************/
-
-        /**********
-         *  CRUD  *
-         **********/
-
-        // GUARDAR
-        public Contrato CrearContrato(string fecha, string hora, string numeroContrato, string direccion, string observaciones, string tipo, string rut)
-        {
-            Contrato Contrato = new Contrato()
-            {
-                FechaCreacion = fecha,
-                HoraInicio = hora,
-                NumeroContrato = numeroContrato,
-                Direccion = direccion,
-                EstadoContrato = "vigente",
-                Observaciones = observaciones,
-                TipoEvento = tipo,
-                ClienteAsociado = rut,
-                HoraTermino = "11:11",
-                FechaTermino = "1111-11-11"
-            };
-            return Contrato;
-        }
-
-        public Contrato CrearContrato(string fecha, string hora, string numeroContrato, string direccion, string observaciones, string tipo, string rut, string estado, string fecha_termino
-            , string hora_termino, string valor)
-        {
-            Contrato Contrato = new Contrato()
-            {
-                FechaCreacion = fecha,
-                HoraInicio = hora,
-                NumeroContrato = numeroContrato,
-                Direccion = direccion,
-                EstadoContrato = estado,
-                Observaciones = observaciones,
-                TipoEvento = tipo,
-                ClienteAsociado = rut,
-                FechaTermino = fecha_termino,
-                HoraTermino = hora_termino,
-                ValorContrato = int.Parse(valor)
-            };
-            return Contrato;
-        }
-
-        public bool GuardarContrato(string direccion, string observaciones, string tipo, string rut)
-        {
-            string fecha = DateTime.Today.ToString("yyyy-MM-dd");
-            string hora = DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString();
-            string numero = GenerarNumeroContrato(fecha, hora);
-
-            if (!ValidarNumeroContrato(numero))
-            {
-                Contrato contrato = CrearContrato(fecha, hora, numero, direccion, observaciones, tipo, rut);
-                if (ToDatabase(contrato))
-                {
-                    return true;
-                }
-                else
-                {
-
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        // LEER
+        // OBTENER TODOS LOS CONTRATOS
         public DataTable ObtenerContratos()
         {
-            DataTable dataSet = null;
-
-            try
-            {
-                MySqlConnection conexion = db.InitConection();
-
-                string consulta = "SELECT con.id, con.numero_contrato, con.fecha_creacion, con.fecha_termino, con.hora_inicio, con.hora_termino, con.direccion, t.nombre_evento, con.observaciones, c.rut, con.valor_contrato FROM Contrato con JOIN Cliente c ON (c.id = con.id_cliente) JOIN Tipo_evento t ON (t.id = con.id_tipo);";
-
-                MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                dataSet = new DataTable();
-                adapter.Fill(dataSet);
-                conexion.Close();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Conexion interrumpida obtener contrato");
-            }
-
+            DataTable dataSet = new DataTable();
+            queries.ConsultaRegistroContratos().Fill(dataSet);
             return dataSet;
         }
-
-        // ACTUALIZAR & "ELIMINAR"
-        public bool TerminarContrato(string txtNumeroContrato)
+        // BUSCAR UN CONTRATO
+        public Contrato BuscarContrato(string numeroContrato)
         {
-            if (ValidarNumeroContrato(txtNumeroContrato) && BuscarContrato(txtNumeroContrato).EstadoContrato != "no vigente")
+            MySqlDataReader reader = queries.ConsultarContrato(numeroContrato);
+            if (reader != null)
             {
-
-                string fecha = DateTime.Today.ToString("yyyy-MM-dd");
-                string hora = DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString();
-
-                string consulta = "UPDATE Contrato SET fecha_termino = '"
-                    + fecha + "', hora_termino = '" + hora
-                    + "', estado_contrato = '" + "no vigente" + "' WHERE numero_contrato = '"
-                    + txtNumeroContrato + "';";
-
-                MySqlConnection conexion = db.InitConection();
-
-                try
+                reader.Read();
+                Contrato contrato = new Contrato()
                 {
-                    MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-                    cmd.ExecuteNonQuery();
-                    return true;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-                finally
-                {
-                    conexion.Close();
-                }
+                    FechaCreacion = reader.GetString(2),
+                    HoraInicio = reader.GetString(4),
+                    NumeroContrato = reader.GetString(1),
+                    Direccion = reader.GetString(6),
+                    EstadoContrato = reader.GetString(9),
+                    Observaciones = reader.GetString(8),
+                    TipoEvento = reader.GetString(10),
+                    ClienteAsociado = reader.GetString(7),
+                    FechaTermino = reader.GetString(3),
+                    HoraTermino = reader.GetString(5),
+                    ValorContrato = int.Parse(reader.GetString(11))
+                };
+                return contrato;
+            }
+            return null;
+        }
+        // VERIFICA SI EL ESTADO DEL CONTRATO INGRESADO ESTA VIGENTE O NO
+        public bool VerificarEstadoContrato(Contrato contrato)
+        {
+            string asociado = contrato.EstadoContrato;
+
+            if (asociado.Equals("no vigente"))
+            {
+                return false;
             }
             else
             {
-                return false;
-            }
-        }
-
-
-        /****************
-        *  UTILITARIOS  *
-        *****************/
-
-        public bool ToDatabase(Contrato contrato)
-        {
-            string consulta = "INSERT INTO Contrato (numero_contrato, fecha_creacion, fecha_termino, hora_inicio, hora_termino, direccion, estado_contrato, id_tipo, observaciones, id_cliente)" +
-                                "VALUES ('" + contrato.NumeroContrato + "', '" + contrato.FechaCreacion + "', '" + contrato.FechaTermino + "', '" + contrato.HoraInicio + "', '" + contrato.HoraTermino + "', '"
-                               + contrato.Direccion + "', '" + contrato.EstadoContrato + "', '" + AsignarIdTipo(contrato.TipoEvento) + "', '" + contrato.Observaciones + "', '" + ObtenerIdCliente(contrato.ClienteAsociado) + "');";
-
-            MySqlConnection conexion = db.InitConection();
-
-            try
-            {
-
-                MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-                cmd.ExecuteNonQuery();
                 return true;
             }
-            catch (Exception)
-            {
-                return false;
-            }
-            finally
-            {
-                conexion.Close();
-            }
+
         }
-
-        public bool ValidarNumeroContrato(string numeroContrato)
+        // CAMBIA EL ESTADO DEL CONTRATO A NO_VIGENTE
+        public bool TerminarContrato(string numeroContrato)
         {
-            MySqlConnection conexion = db.InitConection();
-
-            string consulta = "SELECT * FROM Contrato WHERE numero_contrato = '" + numeroContrato + "';";
-
-            MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-
-            MySqlDataReader reader = cmd.ExecuteReader();
-            reader.Read();
-            if (reader.HasRows)
+            if (numeroContrato.Length == 12 && VerificarEstadoContrato(BuscarContrato(numeroContrato)))
             {
-                string comparar = reader.GetString(1);
-
-                if (comparar == numeroContrato)
+                string fecha = DateTime.Today.ToString("yyyy-MM-dd");
+                string hora = DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString();
+                if (queries.ActualizarRegistroContrato(fecha, hora, numeroContrato))
                 {
                     return true;
                 }
@@ -402,36 +253,7 @@ namespace Negocio
                 return false;
             }
         }
-
-        public List<string> ObtenerTipoEvento()
-        {
-            DataTable dataSet = new DataTable();
-            List<string> tipos = new List<string>();
-
-            MySqlConnection conexion = db.InitConection();
-
-            string consulta = "SELECT nombre_evento FROM Tipo_evento";
-
-            try
-            {
-                MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-
-                adapter.Fill(dataSet);
-
-                foreach (DataRow row in dataSet.Rows)
-                {
-                    tipos.Add(row["nombre_evento"].ToString());
-                }
-            }
-            catch (Exception)
-            {
-
-            }
-
-            return tipos;
-        }
-
+        // GENERA EL NUMERO DE CONTRATO SEGUN REGLAS DE NEGOCIO
         public string GenerarNumeroContrato(string fechaCreacion, string horaInicio)
         {
             string numeroContrato = (fechaCreacion + horaInicio);
@@ -439,81 +261,74 @@ namespace Negocio
             string[] charsToRemove = { " ", "-", ":", "/" };
             foreach (var c in charsToRemove)
             {
-
                 numeroContrato = numeroContrato.Replace(c, string.Empty);
             }
             return numeroContrato;
         }
-
-        public int AsignarIdTipo(string tipo)
+        // GUARDAR CONTRATO
+        public bool GuardarContrato(string direccion, string observaciones, string tipoEvento, string rutClienteAsociado)
         {
-            MySqlConnection conexion = db.InitConection();
+            string fecha = DateTime.Today.ToString("yyyy-MM-dd");
+            string hora = DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString();
+            string numero = GenerarNumeroContrato(fecha, hora);
 
-            string consulta = "SELECT id FROM Tipo_evento WHERE nombre_evento = '" + tipo + "';";
-
-            MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-            string id = "";
-
-            try
+            if (queries.InsertarRegistroContrato(numero, fecha, hora, direccion, "vigente", observaciones, tipoEvento,
+                ObtenerIdCliente(rutClienteAsociado), "11:11", "1111-11-11"))
             {
-                MySqlDataReader reader = cmd.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    reader.Read();
-                    id = reader.GetString(0);
-                }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Conexion interrumpida del id");
-            }
-            finally
-            {
-                conexion.Close();
-            }
-
-            return int.Parse(id);
-        }
-
-        public Contrato BuscarContrato(string numeroContrato)
-        {
-            Contrato contrato = null;
-
-            if (ValidarNumeroContrato(numeroContrato))
-            {
-
-                string consulta = "SELECT id, numero_contrato, fecha_creacion, fecha_termino, time_format(hora_inicio, '%h:%i'), time_format(hora_termino, '%h:%i'), direccion, estado_contrato, id_tipo, observaciones, id_cliente, valor_contrato from Contrato WHERE numero_contrato = '" + numeroContrato + "'; ";
-
-                MySqlConnection conexion = db.InitConection();
-
-                MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-
-                try
-                {
-                    MySqlDataReader reader = cmd.ExecuteReader();
-
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
-                        contrato = CrearContrato(reader.GetString(2), reader.GetString(4), reader.GetString(1), reader.GetString(6), reader.GetString(9), reader.GetString(8), reader.GetString(10), reader.GetString(7), reader.GetString(3), reader.GetString(5), reader.GetString(11));
-                    }
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Conexion interrumpida");
-                }
-                finally
-                {
-                    conexion.Close();
-                }
-                return contrato;
+                return true;
             }
             else
             {
-                return contrato;
+                return false;
             }
         }
+        // OBTENER TODOS LOS TIPOS DE EVENTO
+        public List<string> ObtenerTipoEvento()
+        {
+            DataTable dataSet = new DataTable();
+            queries.ConsultaRegistroContratos().Fill(dataSet);
 
+            List<string> tipos = new List<string>();
+            foreach (DataRow row in dataSet.Rows)
+            {
+                tipos.Add(row["nombre_evento"].ToString());
+            }
+            return tipos;
+        }
+        // FILTRAR CONTRATOS
+        public DataTable FiltrarContratos(string numeroContrato, string rutCliente, string tipoContrato)
+        {
+            DataTable dataSet = new DataTable();
+            queries.FiltrarRegistroContratos(numeroContrato, rutCliente, tipoContrato).Fill(dataSet);
+            return dataSet;
+        }
+        // OBTENER OBJETO TIPO_EVENTO
+        public TipoEvento BuscarTipoEvento(int id)
+        {
+            MySqlDataReader reader = queries.ConsultarTipoEvento(id);
+            if (reader != null)
+            {
+                reader.Read();
+                TipoEvento tipoEvento = new TipoEvento()
+                {
+                    Id = int.Parse(reader.GetString(0)),
+                    Nombre_evento = reader.GetString(1),
+                    Valor_base = int.Parse(reader.GetString(2)),
+                    Personal_base = int.Parse(reader.GetString(3))
+                };
+                return tipoEvento;
+            }
+            return null;
+        }
+        // DEVUELVE EL NOMBRE_EVENTO DE UN TIPO_EVENTO SEGUN EL ID INGRESADO
+        public string ObtenerNombreEvento(int idEvento)
+        {
+            return BuscarTipoEvento(idEvento).Nombre_evento;
+        }
+
+        //FIN CLASE
+
+        // 
         public string BuscarNumeroContrato(string rut, string direccion, string tipo)
         {
             string numero = "";
@@ -545,60 +360,37 @@ namespace Negocio
             }
             return numero;
         }
-
-        public DataTable FiltrarContratos(string numeroContrato, string rutCliente, string tipoContrato)
+        //
+        public bool GuardarValorContrato(int valorContrato, string numeroContrato)
         {
-            DataTable dataSet = new DataTable();
+            if (valorContrato >= 0 && numeroContrato.Length > 0 && BuscarContrato(numeroContrato).ValorContrato <= 1 && BuscarContrato(numeroContrato) != null)
+            {
+                string consulta = "UPDATE Contrato SET valor_contrato = " + valorContrato + " WHERE numero_contrato = '" + numeroContrato + "';";
 
-            string consulta = "SELECT con.id, con.numero_contrato, con.fecha_creacion, con.fecha_termino, con.hora_inicio, con.hora_termino, con.direccion, t.nombre_evento, con.observaciones, c.rut, con.valor_contrato FROM Contrato con JOIN Cliente c ON (c.id = con.id_cliente) JOIN Tipo_evento t ON (t.id = con.id_tipo) WHERE ";
+                MySqlConnection conexion = db.InitConection();
 
-            if (numeroContrato.Length > 0 && rutCliente.Length > 0 && tipoContrato.Length > 0)
-            {
-                consulta += " con.numero_contrato = '" + numeroContrato + "' AND c.rut = '" + rutCliente + "' AND t.nombre_evento = '" + tipoContrato + "';";
-            }
-            else if (numeroContrato.Length > 0 && rutCliente.Length > 0)
-            {
-                consulta += " con.numero_contrato = '" + numeroContrato + "' AND c.rut = '" + rutCliente + "';";
-            }
-            else if (numeroContrato.Length > 0 && tipoContrato.Length > 0)
-            {
-                consulta += " con.numero_contrato = '" + numeroContrato + "' AND t.nombre_evento = '" + tipoContrato + "';";
-            }
-            else if (rutCliente.Length > 0 && tipoContrato.Length > 0)
-            {
-                consulta += " c.rut = '" + rutCliente + "' AND t.nombre_evento = '" + tipoContrato + "';";
-            }
-            else if (numeroContrato.Length == 12)
-            {
-                consulta += " con.numero_contrato = '" + numeroContrato + "';";
-            }
-            else if (rutCliente.Length >= 8)
-            {
-                consulta += " c.rut = '" + rutCliente + "';";
-            }
-            else if (tipoContrato.Length > 0)
-            {
-                consulta += " t.nombre_evento = '" + tipoContrato + "';";
+                try
+                {
+                    MySqlCommand cmd = new MySqlCommand(consulta, conexion);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                finally
+                {
+                    conexion.Close();
+                }
+                return true;
             }
             else
             {
-                consulta = "SELECT con.id, con.numero_contrato, con.fecha_creacion, con.fecha_termino, con.hora_inicio, con.hora_termino, con.direccion, t.nombre_evento, con.observaciones, c.rut , con.valor_contrato FROM Contrato con JOIN Cliente c ON (c.id = con.id) JOIN Tipo_evento t ON (t.id = con.id);";
+                return false;
             }
 
-            try
-            {
-                MySqlConnection conexion = db.InitConection();
-                MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                adapter.Fill(dataSet);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Conexion interrumpida");
-            }
-            return dataSet;
         }
-
+        //
         public int ObtenerValorBase(string nombreEvento)
         {
             int valorBase = 0;
@@ -630,77 +422,7 @@ namespace Negocio
             }
             return valorBase;
         }
-
-        public string ObtenerNombreEvento(int idEvento)
-        {
-            string nombreEvento = "";
-
-            string consulta = "SELECT * FROM Tipo_evento WHERE id =" + idEvento + "; ";
-
-            MySqlConnection conexion = db.InitConection();
-
-            MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-
-            try
-            {
-                MySqlDataReader reader = cmd.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    reader.Read();
-                    nombreEvento = reader.GetString(1);
-                }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Conexion interrumpida");
-            }
-            finally
-            {
-                conexion.Close();
-            }
-            return nombreEvento;
-        }
-
-        public TipoEvento BuscarTipoEvento(string nombreEvento)
-        {
-            string consulta = "SELECT * FROM Tipo_evento WHERE nombre_evento = '" + nombreEvento + "';";
-
-            MySqlConnection conexion = db.InitConection();
-
-            MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-
-            TipoEvento tipoEvento = new TipoEvento();
-            try
-            {
-                MySqlDataReader reader = cmd.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    reader.Read();
-                    tipoEvento.Id = int.Parse(reader.GetString(0));
-                    tipoEvento.Nombre_evento = reader.GetString(1);
-                    tipoEvento.Valor_base = int.Parse(reader.GetString(2));
-                    tipoEvento.Personal_base = int.Parse(reader.GetString(3));
-                }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Conexion interrumpida");
-            }
-            finally
-            {
-                conexion.Close();
-            }
-
-            return tipoEvento;
-        }
-
-
-        /**********************
-         *  CALCULAR VALORES  *
-         **********************/
-
+        //
         public List<float> CalcularTotal(string valorBaseTipoEvento, string recargoAsistentes, string recargoPersonal)
         {
             int valorBase = int.Parse(valorBaseTipoEvento);
@@ -748,35 +470,15 @@ namespace Negocio
 
             return new List<float>() { valorPersonalAdicional, valorAsistentes, valorTotal };
         }
-
-        public bool GuardarValorContrato(int valorContrato, string numeroContrato)
-        {
-            if (valorContrato >= 0 && numeroContrato.Length > 0 && BuscarContrato(numeroContrato).ValorContrato <= 1 && BuscarContrato(numeroContrato) != null)
-            {
-                string consulta = "UPDATE Contrato SET valor_contrato = " + valorContrato + " WHERE numero_contrato = '" + numeroContrato + "';";
-
-                MySqlConnection conexion = db.InitConection();
-
-                try
-                {
-                    MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-                finally
-                {
-                    conexion.Close();
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
     }
 }
+
+// ingresar el nombre
+// al otro metodo le paso este metodo antes para que busque el nombre y le paso BuscarTipoEvento al nombre encontratdo
+// int idEvento = queries.AsignarIdTipo(nombreEvento);
+
+
+/**********************
+ *  CALCULAR VALORES  *
+ **********************/
+

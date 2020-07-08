@@ -72,7 +72,7 @@ namespace Datos
             }
             return adapter;
         }
-        // OBTENER TODOS LOS REGISTROS DE LA TABLA CLIENTES ACTUALIZADO
+        // OBTENER TODOS LOS REGISTROS DE LA TABLA CLIENTES
         public MySqlDataAdapter ConsultaRegistroClientes()
         {
             MySqlDataAdapter adapter = null;
@@ -217,7 +217,254 @@ namespace Datos
             }
         }
 
+        /**************
+         *  CONTRATO  *
+         **************/
 
+        // OBTENER TODOS LOS REGISTROS DE LA TABLA CONTRATO
+        public MySqlDataAdapter ConsultaRegistroContratos()
+        {
+            MySqlDataAdapter adapter = null;
+            MySqlConnection conexion = db.InitConection();
+            try
+            {
+                string consulta = "SELECT con.id, con.numero_contrato, con.fecha_creacion, con.fecha_termino, con.hora_inicio, con.hora_termino, con.direccion, t.nombre_evento, con.observaciones, c.rut, con.valor_contrato FROM Contrato con JOIN Cliente c ON (c.id = con.id_cliente) JOIN Tipo_evento t ON (t.id = con.id_tipo);";
+                MySqlCommand cmd = new MySqlCommand(consulta, conexion);
+                adapter = new MySqlDataAdapter(cmd);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Conexion interrumpida ConsultaRegistroContratos");
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return adapter;
+        }
+        // OBTENER 1 REGISTRO DE LA TABLA CONTRATO SEGUN NUMERO DE CONTRATO
+        public MySqlDataReader ConsultarContrato(string numeroContrato)
+        {
+            MySqlDataReader reader = null;
+            MySqlConnection conexion = db.InitConection();
+            try
+            {
+                string consulta = "SELECT id, numero_contrato, fecha_creacion, fecha_termino, time_format(hora_inicio, '%h:%i'), time_format(hora_termino, '%h:%i'), direccion, estado_contrato, id_tipo, observaciones, id_cliente, valor_contrato from Contrato WHERE numero_contrato = '" + numeroContrato + "'; ";
+                MySqlCommand cmd = new MySqlCommand(consulta, conexion);
+                reader = cmd.ExecuteReader();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Conexion interrumpida ConsultarContrato");
+            }
+            return reader;
+        }
+        // CAMBIA EL ESTADO DE CONTRATO A UN REGISTRO DE LA TABLA CONTRATO
+        public bool ActualizarRegistroContrato(string fecha, string hora, string numeroContrato)
+        {
+            MySqlConnection conexion = db.InitConection();
+
+            try
+            {
+                string consulta = "UPDATE Contrato SET fecha_termino = '"
+                    + fecha + "', hora_termino = '" + hora
+                    + "', estado_contrato = '" + "no vigente" + "' WHERE numero_contrato = '"
+                    + numeroContrato + "';";
+
+                MySqlCommand cmd = new MySqlCommand(consulta, conexion);
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            finally
+            {
+                conexion.Close();
+            }
+        }
+        // VERIFICAR SI RUT EXISTE EN REGISTRO DE TABLA CLIENTE
+        public bool VerificarNumeroContratoExistente(string numeroContrato)
+        {
+            MySqlDataReader reader = ConsultarContrato(numeroContrato);
+            if (reader != null && reader.Read())
+            {
+                if (reader.GetString(1) == numeroContrato)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // OBTIENE EL ID CORRESPONDIENTE AL TIPO DE EVENTO INGRESADO
+        public int AsignarIdTipo(string tipo)
+        {
+            MySqlConnection conexion = db.InitConection();
+
+            string consulta = "SELECT id FROM Tipo_evento WHERE nombre_evento = '" + tipo + "';";
+
+            MySqlCommand cmd = new MySqlCommand(consulta, conexion);
+            string id = "";
+
+            try
+            {
+                MySqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    id = reader.GetString(0);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Conexion interrumpida del id");
+            }
+            finally
+            {
+                conexion.Close();
+            }
+
+            return int.Parse(id);
+        }
+        // INSERTA UN NUEVO REGISTRO EN LA TABLA CONTRATO
+        public bool InsertarRegistroContrato(string numeroContrato, string fechaCreacion, string horaInicio, string direccion,
+            string estadoContrato, string observaciones, string tipoEvento, int idClienteAsociado, string horaTermino,
+            string fechaTermino)
+        {
+            if (!VerificarNumeroContratoExistente(numeroContrato))
+            {
+                MySqlConnection conexion = db.InitConection();
+                try
+                {
+                    string consulta = "INSERT INTO Contrato (numero_contrato, fecha_creacion, fecha_termino, hora_inicio, hora_termino, direccion, estado_contrato, id_tipo, observaciones, id_cliente)" +
+                                "VALUES ('" + numeroContrato + "', '" + fechaCreacion + "', '" + fechaTermino + "', '" + horaInicio + "', '" + horaTermino + "', '"
+                               + direccion + "', '" + estadoContrato + "', '" + AsignarIdTipo(tipoEvento) + "', '" + observaciones + "', '" + idClienteAsociado + "');";
+
+                    MySqlCommand cmd = new MySqlCommand(consulta, conexion);
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Conexion interrumpida InsertarRegistroContrato");
+                    return false;
+                }
+                finally
+                {
+                    conexion.Close();
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        // OBTIENE TODOS LOS REGISTROS DE LA TABLA TIPO EVENTO
+        public MySqlDataAdapter ConsultaRegistroTipoEvento()
+        {
+            MySqlDataAdapter adapter = null;
+            MySqlConnection conexion = db.InitConection();
+            try
+            {
+                string consulta = "SELECT nombre_evento FROM Tipo_evento";
+                MySqlCommand cmd = new MySqlCommand(consulta, conexion);
+                adapter = new MySqlDataAdapter(cmd);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Conexion interrumpida ConsultaRegistroTipoEvento");
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return adapter;
+        }
+        // FILTRAR REGISTRO DE CONTRATOS POR NUMERO_CONTRATO O RUT_CLIENTE O TIPO_CONTRATO
+        public MySqlDataAdapter FiltrarRegistroContratos(string numeroContrato, string rutCliente, string tipoContrato)
+        {
+            string consulta = "SELECT con.id, con.numero_contrato, con.fecha_creacion, con.fecha_termino, con.hora_inicio, con.hora_termino, con.direccion, t.nombre_evento, con.observaciones, c.rut, con.valor_contrato FROM Contrato con JOIN Cliente c ON (c.id = con.id_cliente) JOIN Tipo_evento t ON (t.id = con.id_tipo) WHERE ";
+
+            if (numeroContrato.Length > 0 && rutCliente.Length > 0 && tipoContrato.Length > 0)
+            {
+                consulta += " con.numero_contrato = '" + numeroContrato + "' AND c.rut = '" + rutCliente + "' AND t.nombre_evento = '" + tipoContrato + "';";
+            }
+            else if (numeroContrato.Length > 0 && rutCliente.Length > 0)
+            {
+                consulta += " con.numero_contrato = '" + numeroContrato + "' AND c.rut = '" + rutCliente + "';";
+            }
+            else if (numeroContrato.Length > 0 && tipoContrato.Length > 0)
+            {
+                consulta += " con.numero_contrato = '" + numeroContrato + "' AND t.nombre_evento = '" + tipoContrato + "';";
+            }
+            else if (rutCliente.Length > 0 && tipoContrato.Length > 0)
+            {
+                consulta += " c.rut = '" + rutCliente + "' AND t.nombre_evento = '" + tipoContrato + "';";
+            }
+            else if (numeroContrato.Length == 12)
+            {
+                consulta += " con.numero_contrato = '" + numeroContrato + "';";
+            }
+            else if (rutCliente.Length >= 8)
+            {
+                consulta += " c.rut = '" + rutCliente + "';";
+            }
+            else if (tipoContrato.Length > 0)
+            {
+                consulta += " t.nombre_evento = '" + tipoContrato + "';";
+            }
+            else
+            {
+                consulta = "SELECT con.id, con.numero_contrato, con.fecha_creacion, con.fecha_termino, con.hora_inicio, con.hora_termino, con.direccion, t.nombre_evento, con.observaciones, c.rut , con.valor_contrato FROM Contrato con JOIN Cliente c ON (c.id = con.id) JOIN Tipo_evento t ON (t.id = con.id);";
+            }
+
+            MySqlDataAdapter adapter = null;
+            MySqlConnection conexion = db.InitConection();
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(consulta, conexion);
+                adapter = new MySqlDataAdapter(cmd);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Conexion interrumpida FiltrarRegistroContratos");
+            }
+            finally
+            {
+                conexion.Close();
+            }
+            return adapter;
+        }
+        // OBTENER TODOS LOS REGISTROS DE LA TABLA CLIENTES
+        public MySqlDataReader ConsultarTipoEvento(int idEvento)
+        {
+            MySqlDataReader reader = null;
+            MySqlConnection conexion = db.InitConection();
+
+            try
+            {
+                string consulta = "SELECT * FROM Tipo_evento WHERE id =" + idEvento + "; ";
+                MySqlCommand cmd = new MySqlCommand(consulta, conexion);
+                reader = cmd.ExecuteReader();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Conexion interrumpida ConsultarTipoEvento");
+            }
+
+            return reader;
+        }
 
         // fin clase
     }
