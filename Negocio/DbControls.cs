@@ -473,9 +473,6 @@ namespace Negocio
     }
 }
 
-// ingresar el nombre
-// al otro metodo le paso este metodo antes para que busque el nombre y le paso BuscarTipoEvento al nombre encontratdo
-// int idEvento = queries.AsignarIdTipo(nombreEvento);
 
 
 /**********************
