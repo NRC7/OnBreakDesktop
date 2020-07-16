@@ -13,9 +13,9 @@
         <!-- NAVBAR -->
         <Image HorizontalAlignment="Left" Height="135" Margin="60,25,0,0" VerticalAlignment="Top" Width="215" Stretch="Fill" Source="Images/logo.png"/>
         <Label Margin="280,10,510,0" VerticalAlignment="Top" Background="White" Width="2.5" Height="150"/>
-        <Label Content="Eventos Empresariales" HorizontalAlignment="Center" Margin="300,45,305,0" VerticalAlignment="Top" Background="{x:Null}" Width="189" Foreground="White" HorizontalContentAlignment="Center" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Eventos Empresariales" HorizontalAlignment="Center" Margin="300,45,278.333,0" VerticalAlignment="Top" Background="{x:Null}" Width="215" Foreground="White" HorizontalContentAlignment="Center" FontSize="18" FontWeight="Bold"/>
         <Label Content="Más de 20 años entregando servicios gastronomicos" HorizontalAlignment="Center" Margin="300,100,39,0" VerticalAlignment="Top" Background="{x:Null}" Width="455" Foreground="White" HorizontalContentAlignment="Center" FontSize="18" FontWeight="Bold"/>
-        
+
         <!-- ACCIONES -->
         <!-- FILA SUPERIOR -->
         <Button Foreground="White" Content="Admin. Clientes" HorizontalAlignment="Left" Margin="60,185,0,0" VerticalAlignment="Top" Width="215" Height="135" Background="#FF7C54C3" FontSize="16" FontWeight="Normal" BorderBrush="#FF7C54C3" Click="Button_Click_AdminClientes"/>

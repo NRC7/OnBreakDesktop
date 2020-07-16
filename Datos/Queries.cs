@@ -581,6 +581,36 @@ namespace Datos
 
             return reader;
         }
+
+        public bool GuardarValorContrato(int valorContrato, string numeroContrato, int idTipo, int idContrato)
+        {
+            if (valorContrato >= 0 && numeroContrato.Length > 0)
+            {
+                string consulta = "INSERT INTO Detalle_evento(alimentacion, ambientacion, musica_ambiental, local_evento, id_tipo, id_contrato, valor_contrato) + " +
+                    "VALUES('Mixta', 'no', 'no', 'no', " + idTipo + "," + idContrato + "," + valorContrato + ");";
+
+                MySqlConnection conexion = db.InitConection();
+
+                try
+                {
+                    MySqlCommand cmd = new MySqlCommand(consulta, conexion);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                finally
+                {
+                    conexion.Close();
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
 

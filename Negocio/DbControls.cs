@@ -470,34 +470,19 @@ namespace Negocio
         // Genera el detalle del evento
         public bool GuardarValorContrato(int valorContrato, string numeroContrato)
         {
-            // GUARDAR INFORMACION EN DETALLE_EVENTO
-            // ABRIR ULTIMA VENTANA DE DETALLE PARA ACTUALIZAR REGISTRO DETALLE_EVENTO
-            return true;
-            /*if (valorContrato >= 0 && numeroContrato.Length > 0 && BuscarContrato(numeroContrato).ValorContrato <= 1 && BuscarContrato(numeroContrato) != null)
+            Contrato contrato = BuscarContrato(numeroContrato);
+            TipoEvento evento = BuscarTipoEvento(contrato.TipoDeEvento);
+            // GUARDAR INFORMACION PARCIAL EN DETALLE_EVENTO
+            //public bool GuardarValorContrato(int valorContrato, string numeroContrato, int idTipo, int idContrato)
+            if (queries.GuardarValorContrato(valorContrato, numeroContrato, evento.Id, int.Parse(contrato.IdContrato)))
             {
-                string consulta = "UPDATE Contrato SET valor_contrato = " + valorContrato + " WHERE numero_contrato = '" + numeroContrato + "';";
-
-                MySqlConnection conexion = db.InitConection();
-
-                try
-                {
-                    MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-                finally
-                {
-                    conexion.Close();
-                }
                 return true;
             }
             else
             {
                 return false;
-            }*/
+            }
+
         }
 
         // Entrega los valores para calcular el valor total del contrato

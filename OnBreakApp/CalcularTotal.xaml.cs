@@ -54,7 +54,7 @@ namespace OnBreakApp
             // ABRIR ULTIMA VENTANA PARA ACTUALIZAR REGISTRO DETALLE_EVENTO
             // CON INFO OPCIONAL PARA EL EVENTO
             NotifyUser(2);
-            /*
+
             if (new DbCrud().GuardarValorContrato(int.Parse(txtValorTotal.Text), txtNumeroContrato.Text))
             {
                 NotifyUser(2);
@@ -62,7 +62,7 @@ namespace OnBreakApp
             else
             {
                 NotifyUser(3);
-            }*/
+            }
         }
 
         // CLICK CALCULAR VALORES CONTRATO
