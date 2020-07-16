@@ -66,3 +66,8 @@ C:\Users\Nicolas\Desktop\PROYECTO ONBREAK\OnBreak\Negocio.Tests\obj\Debug\Negoci
 C:\Users\Nicolas\Desktop\PROYECTO ONBREAK\OnBreak\Negocio.Tests\obj\Debug\Negocio.Tests.csproj.CopyComplete
 C:\Users\Nicolas\Desktop\PROYECTO ONBREAK\OnBreak\Negocio.Tests\obj\Debug\Negocio.Tests.dll
 C:\Users\Nicolas\Desktop\PROYECTO ONBREAK\OnBreak\Negocio.Tests\obj\Debug\Negocio.Tests.pdb
+C:\Users\Nicolas\Desktop\PROYECTO ONBREAK\OnBreak\Negocio.Tests\bin\Debug\Negocio.Tests.dll.config
+C:\Users\Nicolas\Desktop\PROYECTO ONBREAK\OnBreak\Negocio.Tests\bin\Debug\Datos.dll
+C:\Users\Nicolas\Desktop\PROYECTO ONBREAK\OnBreak\Negocio.Tests\bin\Debug\Datos.pdb
+C:\Users\Nicolas\Desktop\PROYECTO ONBREAK\OnBreak\Negocio.Tests\bin\Debug\Datos.dll.config
+C:\Users\Nicolas\Desktop\PROYECTO ONBREAK\OnBreak\Negocio.Tests\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml

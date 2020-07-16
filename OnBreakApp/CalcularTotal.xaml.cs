@@ -28,6 +28,7 @@ namespace OnBreakApp
 
         public CalcularTotal(string numeroContrato, string nombreEvento)
         {
+
             InitializeComponent();
             txtNumeroContrato.Text = numeroContrato;
             txtTipoEvento.Text = nombreEvento;
@@ -50,6 +51,10 @@ namespace OnBreakApp
         // CLICK GUARDAR
         private void Button_Click_Guardar(object sender, RoutedEventArgs e)
         {
+            // ABRIR ULTIMA VENTANA PARA ACTUALIZAR REGISTRO DETALLE_EVENTO
+            // CON INFO OPCIONAL PARA EL EVENTO
+            NotifyUser(2);
+            /*
             if (new DbCrud().GuardarValorContrato(int.Parse(txtValorTotal.Text), txtNumeroContrato.Text))
             {
                 NotifyUser(2);
@@ -57,13 +62,13 @@ namespace OnBreakApp
             else
             {
                 NotifyUser(3);
-            }
+            }*/
         }
 
         // CLICK CALCULAR VALORES CONTRATO
         private void Button_Click_Calcular(object sender, RoutedEventArgs e)
         {
-            if (txtAsistentes.Text.Length > 0 && txtPersonal.Text.Length > 0 && int.Parse(txtAsistentes.Text) >= 0 && int.Parse(txtPersonal.Text) >= 0)
+            if (ValidarFormatoNumeroContrato(txtAsistentes.Text) && ValidarFormatoNumeroContrato(txtPersonal.Text))
             {
 
                 float[] valores = new DbCrud().CalcularTotal(txtValorBase.Text, txtAsistentes.Text, txtPersonal.Text).ToArray();
@@ -93,6 +98,18 @@ namespace OnBreakApp
                 case 1: await this.ShowMessageAsync("Calcular", "Ingresa los datos solicitados"); break;
                 case 2: await this.ShowMessageAsync("Calcular", "Valor guardado con exito"); break;
                 case 3: await this.ShowMessageAsync("Calcular", "Intentalo nuevamente"); break;
+            }
+        }
+
+        private bool ValidarFormatoNumeroContrato(string numero)
+        {
+            if (numero.Trim().Length > 0 && int.TryParse(numero.ToString(), out int result) && int.Parse(numero) >= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

@@ -9,7 +9,7 @@
         xmlns:local="clr-namespace:OnBreakApp"
         mc:Ignorable="d"
         Title="OnBreak - Eventos Empresariales" Background="Black" Height="700" Width="1000" WindowStartupLocation="CenterScreen">
-    <Grid Margin="0,8,0,-8">
+    <Grid Margin="7,21,-6.667,-21.333">
 
         <!-- SIDE BAR -->
         <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="671" Margin="0,-10,0,0" Stroke="Black" VerticalAlignment="Top" Width="160"/>
@@ -22,12 +22,12 @@
 
         <!-- NAV BAR -->
         <Label Content="ADMIN. CONTRATOS" HorizontalAlignment="Center" Margin="160,-10,0,633" VerticalAlignment="Bottom" Background="White" Width="834" Foreground="Black" HorizontalContentAlignment="Center" FontSize="20" FontWeight="Bold" Height="48"/>
-        <Label Content="Buscar Contrato" HorizontalAlignment="Center" Margin="203,57,649,0" VerticalAlignment="Top" Background="{x:Null}" Width="142" Foreground="White" HorizontalContentAlignment="Center" FontSize="18" RenderTransformOrigin="0.529,-1.206" Height="35"/>
-        <Label Content="Ingrese el numero del contrato" HorizontalAlignment="Center" Margin="315,91,414,0" VerticalAlignment="Top" Background="{x:Null}" Width="265" Foreground="White" HorizontalContentAlignment="Center" FontSize="18"/>
+        <Label Content="Buscar Contrato" HorizontalAlignment="Center" Margin="203,38,648,0" VerticalAlignment="Top" Background="{x:Null}" Width="142" Foreground="White" HorizontalContentAlignment="Center" FontSize="18" RenderTransformOrigin="0.529,-1.206" Height="35"/>
+        <Label Content="Ingrese el numero del contrato" HorizontalAlignment="Center" Margin="245,73,483,0" VerticalAlignment="Top" Background="{x:Null}" Width="265" Foreground="White" HorizontalContentAlignment="Center" FontSize="18"/>
         <!-- INGRESA RUT-->
         <TextBox x:Name="txtRutBuscarContrato" HorizontalAlignment="Left" Height="35" Controls:TextBoxHelper.ClearTextButton="True"
                  Controls:TextBoxHelper.Watermark=""
-                 Margin="585,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155" 
+                 Margin="530,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" 
                   FontSize="18" Background="#FFF3EBEB" RenderTransformOrigin="0.466,0.375">
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -38,32 +38,17 @@
                 </TransformGroup>
             </TextBox.RenderTransform>
         </TextBox>
-        <Button Content="Buscar" Foreground="White" HorizontalAlignment="Left" Margin="805,89,0,0" VerticalAlignment="Top" Width="147" Background="#FF426EE4" FontWeight="SemiBold" FontSize="18" Height="36" RenderTransformOrigin="0.5,0.5" Click="Button_Click_Buscar"/>
-        <Label Margin="190,148,24,0" VerticalAlignment="Top" Background="White" Height="2"/>
+        <Button Content="Buscar" Foreground="White" HorizontalAlignment="Left" Margin="790,71,0,0" VerticalAlignment="Top" Width="147" Background="#FF426EE4" FontWeight="SemiBold" FontSize="18" Height="36" RenderTransformOrigin="0.5,0.5" Click="Button_Click_Buscar"/>
+        <Label Margin="190,116,24,0" VerticalAlignment="Top" Background="White" Height="2"/>
 
         <!-- FORMULARIO -->
-        <Label Content="Ingrese los datos del cliente, recuerde que todos los " HorizontalAlignment="Center" Margin="230,156,327,0" VerticalAlignment="Top" Background="{x:Null}" Width="437" Foreground="White" HorizontalContentAlignment="Center" FontSize="18"/>
-        <Label Content="campos son obligatorios!" HorizontalAlignment="Center" Margin="662,156,121,0" VerticalAlignment="Top" Background="{x:Null}" Width="211" Foreground="#FFD42222" HorizontalContentAlignment="Center" FontSize="18" RenderTransformOrigin="0.365,0.706"/>
+        <Label Content="Ingrese los datos del cliente, recuerde que todos son obligatorios" HorizontalAlignment="Center" Margin="203,123,33,0" VerticalAlignment="Top" Background="{x:Null}" Width="757" Foreground="White" HorizontalContentAlignment="Center" FontSize="18"/>
         <!-- NUMERO CONTRATO -->
-        <Label Content="Numero Contrato" HorizontalAlignment="Center" Margin="203,211,649,0" VerticalAlignment="Top" Background="{x:Null}" Width="142" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30"/>
-        <TextBox IsEnabled="false" x:Name="txtNumeroContrato" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
-            Controls:TextBoxHelper.Watermark=""
-            Margin="365,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" 
-            FontSize="16" Background="#FFF3EBEB" RenderTransformOrigin="0.466,0.375">
-            <TextBox.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleX="2.088"/>
-                    <RotateTransform/>
-                    <TranslateTransform X="0.401"/>
-                </TransformGroup>
-            </TextBox.RenderTransform>
-        </TextBox>
+        <Label Content="Numero Contrato" HorizontalAlignment="Center" Margin="245,265,606,0" VerticalAlignment="Top" Background="{x:Null}" Width="142" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30"/>
         <!-- FECHA CREACION -->
-        <Label Content="Fecha Creacion" HorizontalAlignment="Center" Margin="203,269,649,0" VerticalAlignment="Top" Background="{x:Null}" Width="142" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.507,0.032"/>
-        <TextBox IsEnabled="false" x:Name="txtFechaCreacion" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
+        <TextBox Text="AAAA-MM-DD" IsEnabled="False" x:Name="txtFechaInicio" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
             Controls:TextBoxHelper.Watermark=""
-            Margin="365,270,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" 
+            Margin="350,350,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" 
             FontSize="16" Background="#FFF3EBEB" RenderTransformOrigin="0.466,0.375">
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -75,10 +60,9 @@
             </TextBox.RenderTransform>
         </TextBox>
         <!-- FECHA TERMINO -->
-        <Label Content="Fecha Termino" HorizontalAlignment="Center" Margin="230,322,649,0" VerticalAlignment="Top" Background="{x:Null}" Width="115" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.522,0.355" Height="32"/>
-        <TextBox x:Name="txtFechaTermino" IsEnabled="false" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
+        <TextBox Text="AAAA-MM-DD" x:Name="txtFechaTermino" IsEnabled="False" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
             Controls:TextBoxHelper.Watermark=""
-            Margin="365,320,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" 
+            Margin="760,346,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" 
             FontSize="16" Background="#FFF3EBEB" RenderTransformOrigin="0.466,0.375">
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -90,10 +74,9 @@
             </TextBox.RenderTransform>
         </TextBox>
         <!-- HORA INICIO -->
-        <Label Content="Hora Inicio" HorizontalAlignment="Center" Margin="230,377,649,0" VerticalAlignment="Top" Background="{x:Null}" Width="115" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.478,-0.032"/>
-        <TextBox x:Name="txtHoraInicio" IsEnabled="False" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
+        <TextBox Text="HH:MM" x:Name="txtHoraInicio" IsEnabled="False" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
             Controls:TextBoxHelper.Watermark=""
-            Margin="365,380,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" 
+            Margin="350,395,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" 
             FontSize="16" Background="#FFF3EBEB" RenderTransformOrigin="0.466,0.375">
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -105,10 +88,9 @@
             </TextBox.RenderTransform>
         </TextBox>
         <!-- HORA TERMINO -->
-        <Label Content="Hora Termino" HorizontalAlignment="Center" Margin="230,438,649,0" VerticalAlignment="Top" Background="{x:Null}" Width="115" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.435,0.226" Height="32"/>
-        <TextBox x:Name="txtHoraTermino" IsEnabled="false" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
+        <TextBox Text="HH:MM" x:Name="txtHoraTermino" IsEnabled="False" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
             Controls:TextBoxHelper.Watermark=""
-            Margin="370,445,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" 
+            Margin="760,391,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" 
             FontSize="16" Background="#FFF3EBEB" RenderTransformOrigin="0.466,0.375">
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -120,17 +102,15 @@
             </TextBox.RenderTransform>
         </TextBox>
         <!-- ESTADO -->
-        <Label Content="Estado" HorizontalAlignment="Center" Margin="635,202,244,0" VerticalAlignment="Top" Background="{x:Null}" Width="115" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.522,0.839"/>
-        <RadioButton x:Name="rbVigente" IsEnabled="False" Content="Vigente" HorizontalAlignment="Left" Margin="740,207,0,0" VerticalAlignment="Top" Foreground="White" Width="90" FontSize="16"/>
-        <RadioButton IsEnabled="False" x:Name="rbNoVigente" Content="No Vigente" HorizontalAlignment="Left" Margin="850,207,0,0" VerticalAlignment="Top" Foreground="White" FontSize="16" Width="115"/>
+        <Label Content="Estado del Contrato" HorizontalAlignment="Center" Margin="180,494,658,0" VerticalAlignment="Top" Background="{x:Null}" Width="155" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.522,0.839"/>
         <!-- TIPO -->
-        <Label Content="Tipo" HorizontalAlignment="Center" Margin="675,265,279,0" VerticalAlignment="Top" Background="{x:Null}" Width="40" Foreground="#FFD42222" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.602,1.733"/>
-        <ComboBox x:Name="cbTipoContrato" HorizontalAlignment="Left" Margin="760,269,0,0" VerticalAlignment="Top" Width="177" SelectionChanged="CbTipoContrato_SelectionChanged"/>
+        <Label Content="Tipo Evento" HorizontalAlignment="Center" Margin="580,434,276,0" VerticalAlignment="Top" Background="{x:Null}" Width="137" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.602,1.733"/>
+        <ComboBox x:Name="cbTipoContrato" HorizontalAlignment="Left" Margin="760,443,0,0" VerticalAlignment="Top" Width="200" SelectionChanged="CbTipoContrato_SelectionChanged"/>
         <!-- DIRECCION -->
-        <Label Content="Direccion" HorizontalAlignment="Center" Margin="650,365,266,0" VerticalAlignment="Top" Background="{x:Null}" Width="78" Foreground="#FFD42222" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.545,-0.033"/>
-        <TextBox x:Name="txtdireccionContrato" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
+        <Label Content="Direccion" HorizontalAlignment="Center" Margin="230,434,685,0" VerticalAlignment="Top" Background="{x:Null}" Width="78" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.545,-0.033"/>
+        <TextBox IsEnabled="False" x:Name="txtdireccionContrato" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
             Controls:TextBoxHelper.Watermark=""
-            Margin="765,360,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" 
+            Margin="350,440,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" 
             FontSize="16" Background="#FFF3EBEB" RenderTransformOrigin="0.461,-0.667">
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -142,10 +122,10 @@
             </TextBox.RenderTransform>
         </TextBox>
         <!-- ASIGNAR CONTRATO A RUT -->
-        <Label Content="Asignar contrato a Rut" HorizontalAlignment="Center" Margin="575,420,244,0" VerticalAlignment="Top" Background="{x:Null}" Width="175" Foreground="#FFD42222" HorizontalContentAlignment="Center" FontSize="16" Height="30"/>
-        <TextBox TextChanged="TxtRutContrato_TextChanged" x:Name="txtRutContrato" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
+        <Label Content="Rut Asignado" HorizontalAlignment="Center" Margin="272,169,606,0" VerticalAlignment="Top" Background="{x:Null}" Width="115" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.472,1.633"/>
+        <TextBox IsEnabled="True" x:Name="txtRutContrato" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
             Controls:TextBoxHelper.Watermark=""
-            Margin="765,420,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" 
+            Margin="465,170,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" 
             FontSize="16" Background="#FFF3EBEB" RenderTransformOrigin="0.468,0.667">
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -157,10 +137,10 @@
             </TextBox.RenderTransform>
         </TextBox>
         <!-- OBSERVACIONES -->
-        <Label Content="Observaciones" HorizontalAlignment="Center" Margin="230,475,649,0" VerticalAlignment="Top" Background="{x:Null}" Width="115" Foreground="#FFD42222" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.529,-1.206" Height="30"/>
-        <TextBox x:Name="txtObser" HorizontalAlignment="Left" Height="65" Controls:TextBoxHelper.ClearTextButton="True"
+        <Label Content="Observaciones" HorizontalAlignment="Center" Margin="185,545,693,0" VerticalAlignment="Top" Background="{x:Null}" Width="115" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.529,-1.206" Height="30"/>
+        <TextBox IsEnabled="False" x:Name="txtObser" HorizontalAlignment="Left" Height="45" Controls:TextBoxHelper.ClearTextButton="True"
             Controls:TextBoxHelper.Watermark=""
-            Margin="241,515,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="719" 
+            Margin="320,540,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="640" 
             FontSize="16" Background="#FFF3EBEB" RenderTransformOrigin="0.466,0.375">
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -173,22 +153,23 @@
         </TextBox>
 
         <!-- ACCIONES -->
-        <Button Content="Guardar" Foreground="White" HorizontalAlignment="Left" Margin="820,610,0,0" VerticalAlignment="Top" Width="140" Background="#FF27B820" FontWeight="SemiBold" FontSize="18" Click="Button_Click_Guardar"/>
-        <Button Content="Listado" Foreground="Black" HorizontalAlignment="Left" Margin="470,610,0,23" Width="140" Background="#FFDEE63B" FontWeight="SemiBold" FontSize="18" BorderBrush="#FFDEE63B" Click="Button_Click_Listar"/>
-        <Button Content="Calcular Total" Foreground="Black" HorizontalAlignment="Left" Margin="635,610,0,0" VerticalAlignment="Top" Width="155" Background="#FFD89149" FontWeight="SemiBold" FontSize="18" BorderBrush="#FF32CFCF" RenderTransformOrigin="0.5,-0.211" Click="Button_Click_CalcularTotal"/>
-        <Button Content="Terminar Contrato" Foreground="Black" HorizontalAlignment="Left" Margin="245,610,0,0" VerticalAlignment="Top" Width="205" Background="#FF32CFCF" FontWeight="SemiBold" FontSize="18" BorderBrush="#FF32CFCF" RenderTransformOrigin="0.5,-0.211" Click="Button_Click_Terminar"/>
-        <Label x:Name="txtNombre" Content="Nombre" HorizontalAlignment="Center" Margin="595,465,214,0" VerticalAlignment="Top" Background="{x:Null}" Width="185" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30"/>
-        <Label x:Name="txtApellido" Content="Apellido" HorizontalAlignment="Center" Margin="785,465,24,0" VerticalAlignment="Top" Background="{x:Null}" Width="185" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30"/>
-        <Button  Content="Button" HorizontalAlignment="Left" Margin="955,420,0,0" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.05,0.481" Click="Button_Click">
-            <Button.Background>
-                <ImageBrush ImageSource="Icons/User-Login.png"/>
-            </Button.Background>
-            <Button.Foreground>
-                <ImageBrush ImageSource="Icons/User-Login.png"/>
-            </Button.Foreground>
-        </Button>
-        <Label Content="Valor Base" HorizontalAlignment="Center" Margin="635,310,266,0" VerticalAlignment="Top" Background="{x:Null}" Width="93" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.602,1.733"/>
-        <Label x:Name="valor_base" Content="" HorizontalAlignment="Center" Margin="760,310,57,0" VerticalAlignment="Top" Background="{x:Null}" Width="177" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.602,1.733"/>
+        <Button Content="Guardar y Continuar" Foreground="White" HorizontalAlignment="Left" Margin="722,607,0,0" VerticalAlignment="Top" Width="220" Background="#FF27B820" FontWeight="SemiBold" FontSize="18" Click="Button_Click_Guardar"/>
+        <Button Content="Listado de contratos" Foreground="Black" HorizontalAlignment="Left" Margin="455,607,0,26" Width="235" Background="#FFDEE63B" FontWeight="SemiBold" FontSize="18" BorderBrush="#FFDEE63B" Click="Button_Click_Listar"/>
+        <Button Content="Terminar Contrato" Foreground="Black" HorizontalAlignment="Left" Margin="215,607,0,0" VerticalAlignment="Top" Width="205" Background="#FF32CFCF" FontWeight="SemiBold" FontSize="18" BorderBrush="#FF32CFCF" RenderTransformOrigin="0.5,-0.211" Click="Button_Click_Terminar"/>
+        <Label x:Name="txtNombre" Content="Confirma el Rut ingresado" HorizontalAlignment="Center" Margin="425,222,276,0" VerticalAlignment="Top" Background="{x:Null}" Width="292" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30"/>
+        <Label Content="Valor Base" HorizontalAlignment="Center" Margin="610,495,290,0" VerticalAlignment="Top" Background="{x:Null}" Width="93" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.602,1.733"/>
+        <Label x:Name="valor_base" Content="Selecciona el tipo de evento" HorizontalAlignment="Center" Margin="722,495,33,0" VerticalAlignment="Top" Background="{x:Null}" Width="238" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.602,1.733"/>
+        <Label Content="Fecha Inicio Evento" HorizontalAlignment="Center" Margin="190,347,653,0" VerticalAlignment="Top" Background="{x:Null}" Width="150" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.602,1.733"/>
+        <Label Content="Hora Inicio Evento" HorizontalAlignment="Center" Margin="190,391,653,0" VerticalAlignment="Top" Background="{x:Null}" Width="150" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.602,1.733"/>
+        <Button Content="Listado Clientes" HorizontalAlignment="Left" Margin="760,169,0,0" VerticalAlignment="Top" Width="133" Click="Button_Listado_Clientes"/>
+        <Button Content="Confirmar Rut" HorizontalAlignment="Left" Margin="760,216,0,0" VerticalAlignment="Top" Width="133" Click="Button_Confirmar_Rut"/>
+        <Label Content="Razón Social" HorizontalAlignment="Center" Margin="272,222,606,0" VerticalAlignment="Top" Background="{x:Null}" Width="115" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.472,1.633"/>
+        <Label Margin="180,323,33,0" VerticalAlignment="Top" Background="White" Height="2"/>
+        <Label Content="Fecha Término Evento" HorizontalAlignment="Center" Margin="580,347,248,0" VerticalAlignment="Top" Background="{x:Null}" Width="165" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.602,1.733"/>
+        <Label Content="Hora Término Evento" HorizontalAlignment="Center" Margin="580,387,248,0" VerticalAlignment="Top" Background="{x:Null}" Width="165" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30" RenderTransformOrigin="0.602,1.733"/>
+        <Label x:Name="txtEstado" Content="" HorizontalAlignment="Center" Margin="335,494,413,0" VerticalAlignment="Top" Background="{x:Null}" Width="245" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.522,0.839"/>
+        <Button Content="Generar n° Contrato" HorizontalAlignment="Left" Margin="760,265,0,0" VerticalAlignment="Top" Width="133" Click="Button_Generar_Numero_Contrato"/>
+        <Label x:Name="txtNumeroContrato" Content="Generar N° Contrato" HorizontalAlignment="Center" Margin="425,265,276,0" VerticalAlignment="Top" Background="{x:Null}" Width="292" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30"/>
 
     </Grid>
 </Controls:MetroWindow>

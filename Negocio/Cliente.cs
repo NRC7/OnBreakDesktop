@@ -22,7 +22,6 @@ namespace Negocio
         public string Email { get; set; }
         public string TipoEmpresa { get; set; }
         public string ActividadEmpresa { get; set; }
-        public string Servicio { get; set; }
-        public string Contrato { get; set; }
+        public string ContratoAsociado { get; set; }
     }
 }

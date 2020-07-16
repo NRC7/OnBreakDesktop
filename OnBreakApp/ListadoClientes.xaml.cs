@@ -98,8 +98,15 @@ namespace OnBreakApp
             {
                 DataRowView data = (DataRowView)GridClientes.SelectedItem;
                 string rut = data.Row[1].ToString();
-
-                InitWindow(new ListadoContratos(0, rut));
+                Cliente cliente = new DbCrud().BuscarCliente(rut);
+                if (new DbCrud().VerificarContratosAsociados(cliente))
+                {
+                    InitWindow(new ListadoContratos(0, rut));
+                }
+                else
+                {
+                    NotifyUser(2);
+                }
             }
             else
             {
@@ -155,6 +162,7 @@ namespace OnBreakApp
             switch (option)
             {
                 case 1: await this.ShowMessageAsync("Seleccionar", "No haz seleccionado ningun cliente"); break;
+                case 2: await this.ShowMessageAsync("Seleccionar", "Cliente seleccionado no tiene contratos asociados"); break;
             }
         }
 

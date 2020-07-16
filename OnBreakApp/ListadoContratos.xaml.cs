@@ -29,6 +29,7 @@ namespace OnBreakApp
         /* Recibe un valor entero que asigna visibilidad 
          * al boton seleccionar, 0 = oculto, 1 = visible
          */
+        // Actualmente se utiliza desde el menu principal y desde el boton listado de contratos
         public ListadoContratos(int visibility)
         {
             InitializeComponent();
@@ -62,7 +63,8 @@ namespace OnBreakApp
         {
             if (txtContratoFiltrar.Text.Length > 0 || txtRutFiltrar.Text.Length > 0 || txtTipoFiltrar.Text.Length > 0)
             {
-                CompletarTabla(GridContratos, new DbCrud().FiltrarContratos(txtContratoFiltrar.Text, txtRutFiltrar.Text, txtTipoFiltrar.Text));
+                DataTable dataTable = new DbCrud().FiltrarContratos(txtContratoFiltrar.Text, txtRutFiltrar.Text, txtTipoFiltrar.Text);
+                CompletarTabla(GridContratos, dataTable);
                 CleanFields();
             }
             else

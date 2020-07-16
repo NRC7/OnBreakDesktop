@@ -80,7 +80,7 @@
         </TextBox>
         <!-- RUT -->
         <Label Content="Rut" HorizontalAlignment="Center" Margin="230,293,545,0" VerticalAlignment="Top" Background="{x:Null}" Width="115" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.522,0.355" Height="32"/>
-        <TextBox x:Name="txtRut" HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
+        <TextBox x:Name="txtRut" Text="Sin puntos ni guion"  HorizontalAlignment="Left" Height="30" Controls:TextBoxHelper.ClearTextButton="True"
             Controls:TextBoxHelper.Watermark=""
             Margin="365,295,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" 
             FontSize="16" Background="#FFF3EBEB" RenderTransformOrigin="0.466,0.375">
@@ -144,27 +144,13 @@
         <!-- ACTIVIDAD DE EMPRESA -->
         <Label Content="Actividad de Empresa" HorizontalAlignment="Center" Margin="580,319,145,0" VerticalAlignment="Top" Background="{x:Null}" Width="165" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" Height="30"/>
         <ComboBox x:Name="cbActividad" HorizontalAlignment="Left" Margin="775,328,0,0" VerticalAlignment="Top" Width="177" Grid.ColumnSpan="2"/>
-        <!-- SERVICIO REQUERIDO -->
-        <Label Content="Servicio Requerido" HorizontalAlignment="Center" Margin="203,490,545,0" VerticalAlignment="Top" Background="{x:Null}" Width="142" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.529,-1.206" Height="35"/>
-        <TextBox x:Name="txtService" HorizontalAlignment="Left" Height="60" Controls:TextBoxHelper.ClearTextButton="True"
-            Controls:TextBoxHelper.Watermark=""
-            Margin="216,525,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="714" 
-            FontSize="16" Background="#FFF3EBEB" RenderTransformOrigin="0.468,0.667" Grid.ColumnSpan="2">
-            <TextBox.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleX="2.088"/>
-                    <RotateTransform/>
-                    <TranslateTransform X="0.721"/>
-                </TransformGroup>
-            </TextBox.RenderTransform>
-        </TextBox>
 
         <!-- ACCIONES -->
         <Button x:Name="btnSaveClient" Content="Guardar" Foreground="White" HorizontalAlignment="Left" Margin="820,610,0,0" VerticalAlignment="Top" Width="140" Background="#FF27B820" FontWeight="SemiBold" FontSize="18" Click="Button_Click_Guardar" Grid.ColumnSpan="2"/>
         <Button Content="Listado" Foreground="Black" HorizontalAlignment="Left" Margin="640,610,0,0" VerticalAlignment="Top" Width="140" Background="#FFDEE63B" FontWeight="SemiBold" FontSize="18" BorderBrush="#FFDEE63B" Click="Button_Click_Listar"/>
         <Button Content="Eliminar" Foreground="Black" HorizontalAlignment="Left" Margin="465,610,0,0" VerticalAlignment="Top" Width="140" Background="#FF32CFCF" FontWeight="SemiBold" FontSize="18" BorderBrush="#FF32CFCF" RenderTransformOrigin="0.5,-0.211"  Click="Button_Click_Eliminar"/>
         <Button Content="Actualizar" Foreground="Black" HorizontalAlignment="Left" Margin="290,610,0,0" VerticalAlignment="Top" Width="140" Background="#FF32CFCF" FontWeight="SemiBold" FontSize="18" BorderBrush="#FF32CFCF" RenderTransformOrigin="0.5,-0.211"  Click="Button_Click_Actualizar"/>
+        <Label Content="Rut" HorizontalAlignment="Center" Margin="229.667,293,544.666,0" VerticalAlignment="Top" Background="{x:Null}" Width="115" Foreground="White" HorizontalContentAlignment="Center" FontSize="16" RenderTransformOrigin="0.522,0.355" Height="32"/>
 
     </Grid>
 </Controls:MetroWindow>

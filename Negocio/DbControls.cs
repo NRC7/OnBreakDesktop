@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.Windows;
 using Datos;
+using Microsoft.OData.Edm;
 
 namespace Negocio
 {
@@ -33,7 +34,7 @@ namespace Negocio
         public Cliente BuscarCliente(string rut)
         {
             MySqlDataReader reader = queries.ConsultarCliente(rut);
-            if (reader != null)
+            if (reader != null && reader.HasRows)
             {
                 reader.Read();
                 Cliente cliente = new Cliente()
@@ -46,13 +47,41 @@ namespace Negocio
                     Telefono = reader.GetString(5),
                     TipoEmpresa = reader.GetString(7),
                     ActividadEmpresa = reader.GetString(8),
-                    Servicio = reader.GetString(9),
                     Email = reader.GetString(6),
-                    Contrato = reader.GetString(10)
+                    ContratoAsociado = reader.GetString(9)
                 };
                 return cliente;
             }
-            return null;
+            else
+            {
+                return null;
+            }
+        }
+        public Cliente BuscarCliente(int id)
+        {
+            MySqlDataReader reader = queries.ConsultarCliente(id);
+            if (reader != null && reader.HasRows)
+            {
+                reader.Read();
+                Cliente cliente = new Cliente()
+                {
+                    Id = reader.GetString(0),
+                    Rut = reader.GetString(1),
+                    Nombre = reader.GetString(2),
+                    Apellido = reader.GetString(3),
+                    Direccion = reader.GetString(4),
+                    Telefono = reader.GetString(5),
+                    TipoEmpresa = reader.GetString(7),
+                    ActividadEmpresa = reader.GetString(8),
+                    Email = reader.GetString(6),
+                    ContratoAsociado = reader.GetString(9)
+                };
+                return cliente;
+            }
+            else
+            {
+                return null;
+            }
         }
         // ELIMINAR CLIENTE
         public bool EliminarCliente(Cliente cliente)
@@ -84,7 +113,7 @@ namespace Negocio
         // VERIFICA SI UN CLIENTE TIENE ALGUN CONTRATO ASOCIADO
         public bool VerificarContratosAsociados(Cliente cliente)
         {
-            string asociado = cliente.Contrato;
+            string asociado = cliente.ContratoAsociado;
 
             if (asociado.Equals("si"))
             {
@@ -98,9 +127,9 @@ namespace Negocio
         }
         // GUARDAR CLIENTE
         public bool GuardarCliente(string rut, string nombre, string apellido, string direccion,
-            string telefono, string email, string tipoEmpresa, string actividadEmpresa, string servicio)
+            string telefono, string email, string tipoEmpresa, string actividadEmpresa)
         {
-            if (queries.InsertarRegistroCliente(rut, nombre, apellido, direccion, telefono, email, tipoEmpresa, actividadEmpresa, servicio))
+            if (queries.InsertarRegistroCliente(rut, nombre, apellido, direccion, telefono, email, tipoEmpresa, actividadEmpresa) && rut.Length > 0)
             {
                 return true;
             }
@@ -111,7 +140,7 @@ namespace Negocio
         }
         // VALIDAR QUE NUEVOS DATOS INGRESADOS SEAN VALIDOS
         private Cliente ValidarCliente(string rut, string nombre, string apellido, string direccion,
-            string telefono, string email, string tipoEmpresa, string actividadEmpresa, string servicio)
+            string telefono, string email, string tipoEmpresa, string actividadEmpresa)
         {
             Cliente cliente = BuscarCliente(rut);
 
@@ -150,22 +179,17 @@ namespace Negocio
                 cliente.Email = email;
             }
 
-            if (cliente.Servicio != servicio && servicio.Length > 0)
-            {
-                cliente.Servicio = servicio;
-            }
-
             return cliente;
         }
         // ACTUALIZAR UN CLIENTE
         public bool ActualizarCliente(string rut, string nombre, string apellido, string direccion,
-            string telefono, string email, string tipoEmpresa, string actividadEmpresa, string servicio)
+            string telefono, string email, string tipoEmpresa, string actividadEmpresa)
         {
             Cliente cliente = ValidarCliente(rut, nombre, apellido, direccion,
-            telefono, email, tipoEmpresa, actividadEmpresa, servicio);
+            telefono, email, tipoEmpresa, actividadEmpresa);
 
             if (queries.ActualizarRegistroCliente(cliente.Rut, cliente.Nombre, cliente.Apellido, cliente.Direccion,
-            cliente.Telefono, cliente.Email, cliente.TipoEmpresa, cliente.ActividadEmpresa, cliente.Servicio))
+            cliente.Telefono, cliente.Email, cliente.TipoEmpresa, cliente.ActividadEmpresa))
             {
                 return true;
             }
@@ -196,50 +220,114 @@ namespace Negocio
         public Contrato BuscarContrato(string numeroContrato)
         {
             MySqlDataReader reader = queries.ConsultarContrato(numeroContrato);
-            if (reader != null)
+            if (reader != null && reader.HasRows)
             {
                 reader.Read();
-                Contrato contrato = new Contrato()
+                Contrato contrato = new Contrato();
+                try
                 {
-                    FechaCreacion = reader.GetString(2),
-                    HoraInicio = reader.GetString(4),
-                    NumeroContrato = reader.GetString(1),
-                    Direccion = reader.GetString(6),
-                    EstadoContrato = reader.GetString(9),
-                    Observaciones = reader.GetString(8),
-                    TipoEvento = reader.GetString(10),
-                    ClienteAsociado = reader.GetString(7),
-                    FechaTermino = reader.GetString(3),
-                    HoraTermino = reader.GetString(5),
-                    ValorContrato = int.Parse(reader.GetString(11))
-                };
+                    //(reader.GetString(9) != null || !reader.GetString(9).Equals("null"))
+                    contrato = new Contrato()
+                    {
+                        IdContrato = reader.GetString(0),
+                        NumeroContrato = reader.GetString(1),
+                        FechaCreacion = reader.GetString(2),
+                        FechaTermino = reader.GetString(3),
+                        HoraCreacion = reader.GetString(4),
+                        HoraTermino = reader.GetString(5),
+                        Direccion = reader.GetString(6),
+                        EstadoContrato = reader.GetString(7),
+                        TipoDeEvento = reader.GetString(8),
+                        Observaciones = reader.GetString(10),
+                        DescripcionEvento = reader.GetString(9),
+                        ClienteAsociado = reader.GetString(11),
+                        FechaInicio = reader.GetString(12),
+                        HoraInicio = reader.GetString(13),
+                        Alimentacion = reader.GetString(14),
+                        Ambientacion = reader.GetString(15),
+                        MusicaAmbiental = reader.GetString(16),
+                        LocalEvento = reader.GetString(17),
+                        ValorContrato = reader.GetString(18)
+                    };
+                }
+                catch (Exception)
+                {
+
+                    MySqlDataReader auxReader = queries.ConsultarContratosSinDetalle(numeroContrato);
+                    auxReader.Read();
+                    contrato = new Contrato()
+                    {
+                        IdContrato = auxReader.GetString(0),
+                        NumeroContrato = auxReader.GetString(1),
+                        FechaCreacion = auxReader.GetString(2),
+                        FechaTermino = auxReader.GetString(3),
+                        HoraCreacion = auxReader.GetString(4),
+                        HoraTermino = auxReader.GetString(5),
+                        Direccion = auxReader.GetString(6),
+                        EstadoContrato = auxReader.GetString(7),
+                        TipoDeEvento = BuscarTipoEvento(int.Parse(auxReader.GetString(8))).Nombre_evento,
+                        Observaciones = auxReader.GetString(9),
+                        ClienteAsociado = BuscarCliente(int.Parse(auxReader.GetString(10))).Rut,
+                        FechaInicio = reader.GetString(11),
+                        HoraInicio = reader.GetString(12),
+                    };
+
+                }
                 return contrato;
             }
             return null;
         }
+
         // VERIFICA SI EL ESTADO DEL CONTRATO INGRESADO ESTA VIGENTE O NO
         public bool VerificarEstadoContrato(Contrato contrato)
         {
             string asociado = contrato.EstadoContrato;
-
-            if (asociado.Equals("no vigente"))
-            {
-                return false;
-            }
-            else
+            if (asociado.Equals("vigente"))
             {
                 return true;
             }
-
+            else
+            {
+                return false;
+            }
         }
-        // CAMBIA EL ESTADO DEL CONTRATO A NO_VIGENTE
+        // EVALUA LAS FECHAS INGRESADAS Y DEVUELVE EL ESTADO DE TERMINO DE CONTRATO CORRESPONDIENTE
+        public string GenerarEstadoFinalContrato(string fechaInicio, string fechaTermino)
+        {
+            string[] fechaInicioSeparada = fechaInicio.Split('-');
+            string[] fechaTerminoSeparada = fechaTermino.Split('-');
+
+            int anioInicio = int.Parse(fechaInicioSeparada[2]);
+            int aniotermino = int.Parse(fechaTerminoSeparada[0]);
+            int mesInicio = int.Parse(fechaInicioSeparada[1]);
+            int mesTermino = int.Parse(fechaTerminoSeparada[1]);
+            int diaTermino = int.Parse(fechaTerminoSeparada[2]);
+            int diaInicio = int.Parse(fechaInicioSeparada[0]);
+
+
+            if (aniotermino < anioInicio || mesTermino < mesInicio || diaTermino < diaInicio)
+            {
+                return "no realizado";
+            }
+            else if (aniotermino > anioInicio || mesTermino > mesInicio || diaTermino > diaInicio)
+            {
+                return "realizado";
+            }
+            else
+            {
+                return "vigente";
+            }
+        }
+        // CAMBIAR ESTADO DE CONTRATO E INGRESAR FECHA Y HORA DE TERMINO
         public bool TerminarContrato(string numeroContrato)
         {
-            if (numeroContrato.Length == 12 && VerificarEstadoContrato(BuscarContrato(numeroContrato)))
+            Contrato contrato = BuscarContrato(numeroContrato);
+            string fechatermino = DateTime.Today.ToString("yyyy-MM-dd");
+            string fechaInicio = contrato.FechaInicio.Split(' ')[0];
+            string estado = GenerarEstadoFinalContrato(fechaInicio, fechatermino);
+            if (numeroContrato.Length == 12 && VerificarEstadoContrato(contrato) && estado != "vigente")
             {
-                string fecha = DateTime.Today.ToString("yyyy-MM-dd");
-                string hora = DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString();
-                if (queries.ActualizarRegistroContrato(fecha, hora, numeroContrato))
+                if (queries.ActualizarRegistroContrato(numeroContrato, estado))
                 {
                     return true;
                 }
@@ -253,10 +341,14 @@ namespace Negocio
                 return false;
             }
         }
-        // GENERA EL NUMERO DE CONTRATO SEGUN REGLAS DE NEGOCIO
-        public string GenerarNumeroContrato(string fechaCreacion, string horaInicio)
+
+        // GENERAR NUMERO DE CONTRATO DEFINITIVO
+        public string GenerarNumeroContrato()
         {
-            string numeroContrato = (fechaCreacion + horaInicio);
+            string fechaCreacion = DateTime.Today.ToString("yyyy-MM-dd");
+            string auxHoraCreacion = DateTime.Now.ToString("HH:mm");
+            string numeroContrato = (fechaCreacion + auxHoraCreacion);
+
             numeroContrato.Trim();
             string[] charsToRemove = { " ", "-", ":", "/" };
             foreach (var c in charsToRemove)
@@ -266,14 +358,18 @@ namespace Negocio
             return numeroContrato;
         }
         // GUARDAR CONTRATO
-        public bool GuardarContrato(string direccion, string observaciones, string tipoEvento, string rutClienteAsociado)
+        public bool GuardarContrato(string numeroContrato, string fechaTermino, string horaTermino,
+            string direccion, string nombreEvento, string observaciones,
+            string rutAsociado, string fechaInicio, string horaInicio)
         {
-            string fecha = DateTime.Today.ToString("yyyy-MM-dd");
-            string hora = DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString();
-            string numero = GenerarNumeroContrato(fecha, hora);
+            string fechaCreacion = DateTime.Today.ToString("yyyy-MM-dd");
+            string horaCreacion = DateTime.Now.ToString("HH:mm");
+            string estadoContrato = "vigente";
 
-            if (queries.InsertarRegistroContrato(numero, fecha, hora, direccion, "vigente", observaciones, tipoEvento,
-                ObtenerIdCliente(rutClienteAsociado), "11:11", "1111-11-11"))
+            if (queries.InsertarRegistroContrato(numeroContrato, fechaCreacion, fechaTermino,
+                horaCreacion, horaTermino, direccion, estadoContrato, nombreEvento,
+                observaciones, rutAsociado, fechaInicio, horaInicio)
+                && queries.AsociarContratoACliente(rutAsociado))
             {
                 return true;
             }
@@ -286,7 +382,7 @@ namespace Negocio
         public List<string> ObtenerTipoEvento()
         {
             DataTable dataSet = new DataTable();
-            queries.ConsultaRegistroContratos().Fill(dataSet);
+            queries.ConsultaRegistroTipoEvento().Fill(dataSet);
 
             List<string> tipos = new List<string>();
             foreach (DataRow row in dataSet.Rows)
@@ -296,17 +392,42 @@ namespace Negocio
             return tipos;
         }
         // FILTRAR CONTRATOS
-        public DataTable FiltrarContratos(string numeroContrato, string rutCliente, string tipoContrato)
+        public DataTable FiltrarContratos(string numeroContrato, string rutCliente, string tipoEvento)
         {
             DataTable dataSet = new DataTable();
-            queries.FiltrarRegistroContratos(numeroContrato, rutCliente, tipoContrato).Fill(dataSet);
-            return dataSet;
+            queries.FiltrarRegistroContratos(numeroContrato, rutCliente, tipoEvento).Fill(dataSet);
+            if (dataSet != null)
+            {
+                return dataSet;
+            }
+            else
+            {
+                return ObtenerContratos();
+            }
         }
-        // OBTENER OBJETO TIPO_EVENTO
+        // OBTENER OBJETO TIPO_EVENTO SEGUN ID INGRESADO
         public TipoEvento BuscarTipoEvento(int id)
         {
             MySqlDataReader reader = queries.ConsultarTipoEvento(id);
-            if (reader != null)
+            if (reader != null && reader.HasRows)
+            {
+                reader.Read();
+                TipoEvento tipoEvento = new TipoEvento()
+                {
+                    Id = int.Parse(reader.GetString(0)),
+                    Nombre_evento = reader.GetString(1),
+                    Valor_base = int.Parse(reader.GetString(2)),
+                    Personal_base = int.Parse(reader.GetString(3))
+                };
+                return tipoEvento;
+            }
+            return null;
+        }
+        // OBTENER OBJETO TIPO_EVENTO SEGUN NOMBRE
+        public TipoEvento BuscarTipoEvento(string nombre)
+        {
+            MySqlDataReader reader = queries.ConsultarTipoEvento(nombre);
+            if (reader != null && reader.HasRows)
             {
                 reader.Read();
                 TipoEvento tipoEvento = new TipoEvento()
@@ -323,47 +444,36 @@ namespace Negocio
         // DEVUELVE EL NOMBRE_EVENTO DE UN TIPO_EVENTO SEGUN EL ID INGRESADO
         public string ObtenerNombreEvento(int idEvento)
         {
-            return BuscarTipoEvento(idEvento).Nombre_evento;
+            if (BuscarTipoEvento(idEvento) != null)
+            {
+                return BuscarTipoEvento(idEvento).Nombre_evento;
+            }
+            else
+            {
+                return "";
+            }
         }
-
-        //FIN CLASE
-
-        // 
-        public string BuscarNumeroContrato(string rut, string direccion, string tipo)
+        // DEVUELVE EL VALOR_BASE DE UN TIPO_EVENTO SEGUN EL NOMBRE INGRESADO
+        public int ObtenerValorBase(string nombreEvento)
         {
-            string numero = "";
-
-            string consulta = "SELECT con.id, con.numero_contrato, con.fecha_creacion, con.fecha_termino, con.hora_inicio, con.hora_termino, con.direccion, t.nombre_evento, con.observaciones, c.rut, con.valor_contrato FROM Contrato con JOIN Cliente c ON (c.id = con.id_cliente) JOIN Tipo_evento t ON (t.id = con.id_tipo) WHERE c.rut = '"
-                + rut + "' AND  con.direccion = '" + direccion + "' AND t.nombre_evento = '" + tipo + "'; ";
-
-            MySqlConnection conexion = db.InitConection();
-
-            MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-
-            try
+            TipoEvento evento = BuscarTipoEvento(nombreEvento);
+            if (evento != null)
             {
-                MySqlDataReader reader = cmd.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    reader.Read();
-                    numero = reader.GetString(1); ;
-                }
+                return BuscarTipoEvento(nombreEvento).Valor_base;
             }
-            catch (Exception)
+            else
             {
-                MessageBox.Show("Conexion interrumpida");
+                return 0;
             }
-            finally
-            {
-                conexion.Close();
-            }
-            return numero;
         }
-        //
+
+        // Genera el detalle del evento
         public bool GuardarValorContrato(int valorContrato, string numeroContrato)
         {
-            if (valorContrato >= 0 && numeroContrato.Length > 0 && BuscarContrato(numeroContrato).ValorContrato <= 1 && BuscarContrato(numeroContrato) != null)
+            // GUARDAR INFORMACION EN DETALLE_EVENTO
+            // ABRIR ULTIMA VENTANA DE DETALLE PARA ACTUALIZAR REGISTRO DETALLE_EVENTO
+            return true;
+            /*if (valorContrato >= 0 && numeroContrato.Length > 0 && BuscarContrato(numeroContrato).ValorContrato <= 1 && BuscarContrato(numeroContrato) != null)
             {
                 string consulta = "UPDATE Contrato SET valor_contrato = " + valorContrato + " WHERE numero_contrato = '" + numeroContrato + "';";
 
@@ -387,42 +497,10 @@ namespace Negocio
             else
             {
                 return false;
-            }
-
+            }*/
         }
-        //
-        public int ObtenerValorBase(string nombreEvento)
-        {
-            int valorBase = 0;
 
-            string consulta = "SELECT * FROM Tipo_evento WHERE nombre_evento ='" + nombreEvento + "'; ";
-
-            MySqlConnection conexion = db.InitConection();
-
-            MySqlCommand cmd = new MySqlCommand(consulta, conexion);
-
-            try
-            {
-                MySqlDataReader reader = cmd.ExecuteReader();
-
-                if (reader.HasRows)
-                {
-                    reader.Read();
-                    string opt = reader.GetString(2);
-                    valorBase = int.Parse(reader.GetString(2));
-                }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Conexion interrumpida");
-            }
-            finally
-            {
-                conexion.Close();
-            }
-            return valorBase;
-        }
-        //
+        // Entrega los valores para calcular el valor total del contrato
         public List<float> CalcularTotal(string valorBaseTipoEvento, string recargoAsistentes, string recargoPersonal)
         {
             int valorBase = int.Parse(valorBaseTipoEvento);
@@ -472,10 +550,3 @@ namespace Negocio
         }
     }
 }
-
-
-
-/**********************
- *  CALCULAR VALORES  *
- **********************/
-

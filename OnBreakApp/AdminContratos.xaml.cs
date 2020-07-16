@@ -24,6 +24,9 @@ namespace OnBreakApp
 {
     public partial class AdminContratos : MetroWindow
     {
+        // VARIABLES GLOBALES
+        Cliente cliente = null;
+
         /*****************
          * CONSTRUCTORES *
          *****************/
@@ -32,7 +35,6 @@ namespace OnBreakApp
         public AdminContratos()
         {
             InitializeComponent();
-            // Completa el combobox tipo con las opciones disponibles
             PopularTipos();
         }
 
@@ -42,10 +44,12 @@ namespace OnBreakApp
             InitializeComponent();
             // Completa el combobox tipo con las opciones disponibles
             PopularTipos();
-            // Completa todos los campos con la informacion del contrato seleccionado del listado
-            CompletarFormulario(contrato);
-
-            OpcionComboBox(contrato);
+            if (contrato != null)
+            {
+                // Completa todos los campos con la informacion del contrato seleccionado del listado
+                CompletarFormulario(contrato);
+                OpcionComboBox(contrato);
+            }
         }
 
         // Se utiliza desde ventana auxiliar, recibe un cliente seleccionado
@@ -56,12 +60,54 @@ namespace OnBreakApp
             PopularTipos();
             // Completa todos los campos con la informacion del contrato seleccionado del listado
             CompletarFormulario(cliente);
+
+            ActivarComponentes();
         }
 
 
         /***********
          * EVENTOS *
          ***********/
+
+        // EVENTO QUE CONFIRMA QUE EL RUT INGRESADO ESTA REGISTRADO Y ACTIVA LOS COMPONENTES DEL REGISTRO
+        private void Button_Confirmar_Rut(object sender, RoutedEventArgs e)
+        {
+            string rutIngresado = txtRutContrato.Text;
+
+            if (ValidarFormatoRut(rutIngresado))
+            {
+                cliente = new DbCrud().BuscarCliente(rutIngresado);
+                if (cliente != null)
+                {
+                    txtNombre.Content = cliente.Nombre + " " + cliente.Apellido;
+                    ActivarComponentes();
+                }
+                else
+                {
+                    txtNombre.Content = "No Registrado";
+                }
+            }
+            else
+            {
+                NotifyUser(8);
+            }
+        }
+
+        // EVENTO QUE ACTIVA GENERAR NUMERO DE CONTRATO
+        private void Button_Generar_Numero_Contrato(object sender, RoutedEventArgs e)
+        {
+            if (txtNumeroContrato.Content.ToString().Equals("Generar N° Contrato")
+                && ValidarFormatoRut(txtRutContrato.Text))
+            {
+                txtNumeroContrato.Content = new DbCrud().GenerarNumeroContrato();
+            }
+        }
+
+        // EVENTO QUE ABRE VENTANA LISTADO DE CLIENTES
+        private void Button_Listado_Clientes(object sender, RoutedEventArgs e)
+        {
+            InitWindow(new ListadoClientes(1, 0));
+        }
 
         // CLICK BOTON MENU
         private void Button_Click_Menu(object sender, RoutedEventArgs e)
@@ -72,13 +118,20 @@ namespace OnBreakApp
         // CLICK BOTON BUSCAR
         private void Button_Click_Buscar(object sender, RoutedEventArgs e)
         {
-
-            if (txtRutBuscarContrato.Text.Length == 12)
+            if (ValidarFormatoNumeroContrato(txtRutBuscarContrato.Text))
             {
                 Contrato contrato = new DbCrud().BuscarContrato(txtRutBuscarContrato.Text);
-
-                CompletarFormulario(contrato);
-
+                if (contrato != null)
+                {
+                    CompletarFormulario(contrato);
+                    Cliente cliente = new DbCrud().BuscarCliente(contrato.ClienteAsociado);
+                    txtNombre.Content = cliente.Nombre + " " + cliente.Apellido;
+                }
+                else
+                {
+                    NotifyUser(4);
+                    LimpiarCamposInterfaz();
+                }
             }
             else
             {
@@ -91,12 +144,19 @@ namespace OnBreakApp
         {
             if (cbTipoContrato.SelectedItem != null)
             {
-                if (ValidarCampos(txtdireccionContrato.Text, txtObser.Text, cbTipoContrato.SelectedItem.ToString(), txtRutContrato.Text))
+                
+                if (ValidarCampos(txtdireccionContrato.Text, txtObser.Text, cbTipoContrato.SelectedItem.ToString())
+                    && ValidarFormatoRut(txtRutContrato.Text)
+                    && ValidarFormatoNumeroContrato(txtNumeroContrato.Content.ToString())
+                    && ValidarFormatoFecha(txtFechaTermino.Text) && ValidarFormatoHora(txtHoraTermino.Text)
+                    && ValidarFormatoFecha(txtFechaInicio.Text) && ValidarFormatoHora(txtHoraInicio.Text))
                 {
-                    if (new DbCrud().GuardarContrato(txtdireccionContrato.Text, txtObser.Text, cbTipoContrato.SelectedItem.ToString(), txtRutContrato.Text))
+                    if (new DbCrud().GuardarContrato(txtNumeroContrato.Content.ToString(), txtFechaTermino.Text, txtHoraTermino.Text,
+                        txtdireccionContrato.Text, cbTipoContrato.SelectedItem.ToString(), txtObser.Text, txtRutContrato.Text,
+                        txtFechaInicio.Text, txtHoraInicio.Text))
                     {
                         NotifyUser(1);
-
+                        InitWindow(new CalcularTotal(txtNumeroContrato.Content.ToString(), cbTipoContrato.SelectedItem.ToString()));
                     }
                     else
                     {
@@ -114,37 +174,13 @@ namespace OnBreakApp
             }
         }
 
-        // CLICK BOTON CALCULAR TOTAL
-        private void Button_Click_CalcularTotal(object sender, RoutedEventArgs e)
-        {
-            if (txtNumeroContrato.Text.Length == 12 && cbTipoContrato.SelectedItem != null)
-            {
-                InitWindow(new CalcularTotal(txtNumeroContrato.Text, cbTipoContrato.SelectedItem.ToString()));
-            }
-            else if (txtRutContrato.Text.Length > 0 && txtRutContrato.Text.Length <= 9 && txtdireccionContrato.Text.Length > 0 && cbTipoContrato.SelectedItem != null)
-            {
-                string numeroContrato = new DbCrud().BuscarNumeroContrato(txtRutContrato.Text, txtdireccionContrato.Text, cbTipoContrato.SelectedItem.ToString());
-                InitWindow(new CalcularTotal(numeroContrato, cbTipoContrato.SelectedItem.ToString()));
-            }
-            else
-            {
-                NotifyUser(7);
-            }
-        }
-
-        // CLICK BOTON LISTADO CLIENTES
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            InitWindow(new ListadoClientes(0, 0));
-        }
-
-        // CLICK BOTON IMPRIMIR
+        // CLICK BOTON TERMINAR CONTRATO
         private void Button_Click_Terminar(object sender, RoutedEventArgs e)
         {
-            if (new DbCrud().TerminarContrato(txtNumeroContrato.Text))
+            if (new DbCrud().TerminarContrato(txtNumeroContrato.Content.ToString()))
             {
                 NotifyUser(5);
-                CleanForm();
+                LimpiarCamposInterfaz();
             }
             else
             {
@@ -152,40 +188,16 @@ namespace OnBreakApp
             }
         }
 
-        // CLICK BOTON LISTADO
+        // CLICK BOTON LISTADO DE CONTRATOS
         private void Button_Click_Listar(object sender, RoutedEventArgs e)
         {
             InitWindow(new ListadoContratos(0));
         }
 
-        // CUANDO TEXTO CAMBIA EN TEXTBOX RUT ASOCIADO
-        private async void TxtRutContrato_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (txtRutContrato.Text.Length >= 8)
-            {
-
-                Task oTast = new Task(CambioTexto);
-                oTast.Start();
-                await oTast;
-
-                Cliente cliente = new DbCrud().BuscarCliente(txtRutContrato.Text);
-                if (cliente == null)
-                {
-                    txtApellido.Content = "Encontrato";
-                    txtNombre.Content = "No";
-                }
-                else
-                {
-                    txtApellido.Content = cliente.Nombre;
-                    txtNombre.Content = cliente.Apellido;
-                }
-            }
-        }
-
         // CUANDO CAMBIA LA OPCION SELLECIONADA EN COMBO BOX TIPO EVENTO
         private void CbTipoContrato_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            valor_base.Content = new DbCrud().ObtenerValorBase(cbTipoContrato.SelectedItem.ToString());
+            valor_base.Content = new DbCrud().ObtenerValorBase(cbTipoContrato.SelectedItem.ToString()) + " UF";
         }
 
 
@@ -193,10 +205,121 @@ namespace OnBreakApp
          *  UTILITARIOS *
          ****************/
 
-        // Valida que los campos obligatorios sean completados
-        private bool ValidarCampos(string direccion, string observaciones, string tipo, string rut)
+        // VALIDA QUE EL RUT INGRESADO CONTENGA SOLO NUMEROS Y CUMPLA CON LA LONGUITUD VALIDA
+        private bool ValidarFormatoRut(string rut)
         {
-            if (direccion.Length > 0 && observaciones.Length > 0 && tipo.Length > 0 && rut.Length > 0)
+            if (int.TryParse(rut, out int result) && rut.Length >= 8 && rut.Length <= 9)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // ACTIVA LOS CAMPOS OBLIGATORIOS CUANDO TXTRUTCONTRATO CONTIENE UN RUT VALIDO
+        public void ActivarComponentes()
+        {
+            txtFechaInicio.IsEnabled = true;
+            txtHoraInicio.IsEnabled = true;
+            txtdireccionContrato.IsEnabled = true;
+            txtFechaTermino.IsEnabled = true;
+            txtHoraTermino.IsEnabled = true;
+            txtObser.IsEnabled = true;
+        }
+
+        // AÑADE LAS OPCIONES DE TIPO_EVENTO AL COMBO BOX
+        private void PopularTipos()
+        {
+            string[] tipos = new DbCrud().ObtenerTipoEvento().ToArray();
+            for (int i = 0; i < tipos.Length; i++)
+            {
+                cbTipoContrato.Items.Add(tipos[i]);
+            }
+        }
+
+        // VALIDA QUE EL RUT INGRESADO CUMPLA CON EL FORMATO DESEADO
+        private bool ValidarFormatoNumeroContrato(string numero)
+        {
+            if (numero.Trim().Length == 12)
+            {
+                for (int i = 0; i < numero.Length; i++)
+                {
+                    if (!int.TryParse(numero[i].ToString(), out int result))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // VALIDA QUE LA FECHA INGRESADA CUMPLA CON EL FORMATO SOLICITADO AAAA-MM-DD
+        private bool ValidarFormatoFecha(string fecha)
+        {
+            if (fecha.Length == 10 && fecha.Contains('-'))
+            {
+                string[] fechaSeparada = fecha.Split('-');
+                if (int.TryParse(fechaSeparada[0], out int result0)
+                    && int.TryParse(fechaSeparada[1], out int result1)
+                    && int.TryParse(fechaSeparada[2], out int result2)
+                    && fechaSeparada[0] != "0000"
+                    && fechaSeparada[1] != "00"
+                    && fechaSeparada[2] != "00"
+                    && int.Parse(fechaSeparada[0]) == DateTime.Today.Year
+                    && int.Parse(fechaSeparada[1]) > 0
+                    && int.Parse(fechaSeparada[1]) <= 12
+                    && int.Parse(fechaSeparada[2]) > 0
+                    && int.Parse(fechaSeparada[2]) <= 31)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // VALIDA QUE LA HORA INGRESADA CUMPLA CON EL FORMATO SOLICITADO HH:MM
+        private bool ValidarFormatoHora(string hora)
+        {
+            if (hora.Length == 5 && hora.Contains(':'))
+            {
+                string[] horaSeparada = hora.Split(':');
+                if (int.TryParse(horaSeparada[0], out int result0)
+                    && int.TryParse(horaSeparada[1], out int result1)
+                    && int.Parse(horaSeparada[0]) >= 0
+                    && int.Parse(horaSeparada[0]) <= 24
+                    && int.Parse(horaSeparada[0]) >= 0
+                    && int.Parse(horaSeparada[0]) <= 60)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // Valida que los campos obligatorios sean completados
+        private bool ValidarCampos(string direccion, string observaciones, string tipo)
+        {
+            if (direccion.Length > 0 && observaciones.Length > 0 && tipo.Length > 0)
             {
                 return true;
             }
@@ -225,31 +348,25 @@ namespace OnBreakApp
                 case 5: await this.ShowMessageAsync("Terminar", "Contrato terminado con exito"); break;
                 case 6: await this.ShowMessageAsync("Guardar", "Intenta nuevamente"); break;
                 case 7: await this.ShowMessageAsync("Guardar", "No haz ingreado los datos correctamente, busca un contrato o ingresa rut"); break;
+                case 8: await this.ShowMessageAsync("Guardar", "El Rut ingresado no es válido"); break;
             }
         }
 
         // Deja los campos de texto vacios de toda la ventana
-        private void CleanForm()
+        private void LimpiarCamposInterfaz()
         {
             txtRutBuscarContrato.Text = "";
-            txtNumeroContrato.Text = "";
-            txtFechaCreacion.Text = "";
-            txtFechaTermino.Text = "";
-            txtHoraInicio.Text = "";
-            txtHoraTermino.Text = "";
-            txtObser.Text = "";
-            txtdireccionContrato.Text = "";
             txtRutContrato.Text = "";
-        }
-
-        // Añade las opciones de tipo de empresa al combo box
-        private void PopularTipos()
-        {
-            string[] tipos = new DbCrud().ObtenerTipoEvento().ToArray();
-            for (int i = 0; i < tipos.Length; i++)
-            {
-                cbTipoContrato.Items.Add(tipos[i]);
-            }
+            txtNombre.Content = "Confirma el Rut ingresado";
+            txtNumeroContrato.Content = "Generar N° Contrato";
+            txtFechaInicio.Text = "";
+            txtHoraInicio.Text = "";
+            txtdireccionContrato.Text = "";
+            txtFechaTermino.Text = "";
+            txtHoraTermino.Text = "";
+            txtEstado.Content = "";
+            valor_base.Content = "Selecciona el tipo de evento";
+            txtObser.Text = "";
         }
 
         // Completa el formulario a partir de un contrato
@@ -257,23 +374,15 @@ namespace OnBreakApp
         {
             if (contrato != null)
             {
-                txtNumeroContrato.Text = contrato.NumeroContrato;
-                txtFechaCreacion.Text = contrato.FechaCreacion;
+                txtNumeroContrato.Content = contrato.NumeroContrato;
+                txtFechaInicio.Text = contrato.FechaInicio;
                 txtFechaTermino.Text = contrato.FechaTermino;
                 txtHoraInicio.Text = contrato.HoraInicio;
                 txtHoraTermino.Text = contrato.HoraTermino;
                 txtObser.Text = contrato.Observaciones;
                 txtdireccionContrato.Text = contrato.Direccion;
                 txtRutContrato.Text = contrato.ClienteAsociado;
-
-                if (contrato.TipoEvento.Equals("vigente"))
-                {
-                    rbVigente.IsChecked = true;
-                }
-                else
-                {
-                    rbNoVigente.IsChecked = true;
-                }
+                txtEstado.Content = contrato.EstadoContrato;
 
                 OpcionComboBox(contrato);
             }
@@ -281,7 +390,6 @@ namespace OnBreakApp
             {
                 NotifyUser(4);
             }
-
         }
 
         // Completa el formulario a partir de un cliente
@@ -302,7 +410,7 @@ namespace OnBreakApp
         private void OpcionComboBox(Contrato contrato)
         {
             string[] tipos = new DbCrud().ObtenerTipoEvento().ToArray();
-            string nombre = new DbCrud().ObtenerNombreEvento(int.Parse(contrato.TipoEvento));
+            string nombre = contrato.TipoDeEvento;
             for (int i = 0; i < tipos.Length; i++)
             {
                 if (nombre == tipos[i].ToString())
@@ -310,11 +418,6 @@ namespace OnBreakApp
                     cbTipoContrato.SelectedIndex = i;
                 }
             }
-        }
-
-        private void CambioTexto()
-        {
-            Thread.Sleep(2000);
         }
     }
 }

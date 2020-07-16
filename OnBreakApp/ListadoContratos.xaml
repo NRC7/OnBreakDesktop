@@ -25,10 +25,10 @@
         <Rectangle Fill="Black" HorizontalAlignment="Left" Height="100" Margin="160,28,0,0" Stroke="Black" VerticalAlignment="Top" Width="1130"/>
         <Label Content="LISTADO DE CONTRATOS" HorizontalAlignment="Center" Margin="157,0,0,638" VerticalAlignment="Bottom" Background="White" Width="1135" Foreground="Black" HorizontalContentAlignment="Center" FontSize="20" FontWeight="Bold" Height="33"/>
         <Label Content="Filtrar busqueda de clientes por:" HorizontalAlignment="Center" Margin="165,33,847,0" VerticalAlignment="Top" Background="{x:Null}" Width="280" Foreground="White" HorizontalContentAlignment="Center" FontSize="18"/>
-        <Label Content="Numero Contrato" HorizontalAlignment="Center" Margin="186,72,947,0" VerticalAlignment="Top" Background="{x:Null}" Width="159" Foreground="White" HorizontalContentAlignment="Center" FontSize="18" RenderTransformOrigin="0.638,0.765"/>
+        <Label Content="N° Contrato" HorizontalAlignment="Center" Margin="170,76,1011.333,0" VerticalAlignment="Top" Background="{x:Null}" Width="110" Foreground="White" HorizontalContentAlignment="Center" FontSize="18" RenderTransformOrigin="0.638,0.765"/>
         <TextBox x:Name="txtContratoFiltrar" HorizontalAlignment="Left" Height="35" Controls:TextBoxHelper.ClearTextButton="True"
                  Controls:TextBoxHelper.Watermark=""
-                 Margin="355,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155" 
+                 Margin="285,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" 
                   FontSize="18" Background="#FFF3EBEB" RenderTransformOrigin="0.286,0.571">
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -39,10 +39,10 @@
                 </TransformGroup>
             </TextBox.RenderTransform>
         </TextBox>
-        <Label Content="Rut Cliente" HorizontalAlignment="Center" Margin="523,72,647,0" VerticalAlignment="Top" Background="{x:Null}" Width="122" Foreground="White" HorizontalContentAlignment="Center" FontSize="18"/>
+        <Label Content="Rut Cliente" HorizontalAlignment="Center" Margin="488,76,706.333,0" VerticalAlignment="Top" Background="{x:Null}" Width="97" Foreground="White" HorizontalContentAlignment="Center" FontSize="18"/>
         <TextBox x:Name="txtRutFiltrar" HorizontalAlignment="Left" Height="35" Controls:TextBoxHelper.ClearTextButton="True"
             Controls:TextBoxHelper.Watermark=""
-            Margin="640,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155" 
+            Margin="590,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="176" 
             FontSize="18" Background="#FFF3EBEB" RenderTransformOrigin="0.466,0.375">
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -53,10 +53,10 @@
                 </TransformGroup>
             </TextBox.RenderTransform>
         </TextBox>
-        <Label Content="Tipo" HorizontalAlignment="Center" Margin="845,72,383,0" VerticalAlignment="Top" Background="{x:Null}" Width="64" Foreground="White" HorizontalContentAlignment="Center" FontSize="18" RenderTransformOrigin="0.313,0.324"/>
+        <Label Content="Nombre Evento" HorizontalAlignment="Center" Margin="785,74,371.333,0" VerticalAlignment="Top" Background="{x:Null}" Width="135" Foreground="White" HorizontalContentAlignment="Center" FontSize="18" RenderTransformOrigin="0.313,0.324"/>
         <TextBox x:Name="txtTipoFiltrar"  HorizontalAlignment="Left" Height="35" Controls:TextBoxHelper.ClearTextButton="True"
             Controls:TextBoxHelper.Watermark=""
-            Margin="910,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155" 
+            Margin="935,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="215" 
             FontSize="18" Background="#FFF3EBEB" RenderTransformOrigin="0.484,0">
             <TextBox.RenderTransform>
                 <TransformGroup>
@@ -67,15 +67,15 @@
                 </TransformGroup>
             </TextBox.RenderTransform>
         </TextBox>
-        <Button Content="Filtrar" Foreground="Black" HorizontalAlignment="Left" Margin="1090,72,0,0" VerticalAlignment="Top" Width="140" Background="#FFF3EC51" FontWeight="SemiBold" FontSize="18" Click="Button_Click_Filtrar" RenderTransformOrigin="0.064,0.605"/>
+        <Button Content="Filtrar" Foreground="Black" HorizontalAlignment="Left" Margin="1181,72,0,0" VerticalAlignment="Top" Width="82" Background="#FFF3EC51" FontWeight="SemiBold" FontSize="18" Click="Button_Click_Filtrar" RenderTransformOrigin="0.064,0.605"/>
         <Label Margin="186,133,28,0" VerticalAlignment="Top" Background="White" Height="2"/>
 
         <!-- Table -->
-        <DataGrid IsReadOnly="True" x:Name="GridContratos" HorizontalAlignment="Left" Height="435" Margin="186,153,0,0" VerticalAlignment="Top" Width="1078"/>
+        <DataGrid IsReadOnly="True" x:Name="GridContratos" HorizontalAlignment="Left" Height="435" Margin="185,155,0,0" VerticalAlignment="Top" Width="1078"/>
 
         <!-- ACCIONES -->
-        <Button x:Name="btnSelecionarContrato" Content="Seleccionar" Foreground="White" HorizontalAlignment="Left" Margin="1090,610,0,0" VerticalAlignment="Top" Width="140" Background="#FF27B820" FontWeight="SemiBold" FontSize="18" Click="Button_Click_Seleccionar" RenderTransformOrigin="0.179,0.395"/>
-        <Button x:Name="btnCargarCliente" Content="Cargar Cliente" Foreground="White" HorizontalAlignment="Left" Margin="875,610,0,0" VerticalAlignment="Top" Width="165" Background="#FF27B820" FontWeight="SemiBold" FontSize="18" Click="Button_Click_Cliente" RenderTransformOrigin="0.5,0.5"/>
+        <Button x:Name="btnSelecionarContrato" Content="SELECCIONAR CONTRATO" Foreground="White" HorizontalAlignment="Left" Margin="995,610,0,0" VerticalAlignment="Top" Width="235" Background="#FF27B820" FontWeight="SemiBold" FontSize="18" Click="Button_Click_Seleccionar" RenderTransformOrigin="0.179,0.395"/>
+        <Button x:Name="btnCargarCliente" Content="lISTADO DE CLIENTES" Foreground="White" HorizontalAlignment="Left" Margin="735,610,0,0" VerticalAlignment="Top" Width="230" Background="#FF27B820" FontWeight="SemiBold" FontSize="18" Click="Button_Click_Cliente" RenderTransformOrigin="0.5,0.5"/>
 
     </Grid>
 </Controls:MetroWindow>

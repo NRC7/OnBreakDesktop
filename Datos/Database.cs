@@ -15,6 +15,7 @@ namespace Datos
 
         public MySqlConnection InitConection()
         {
+            // server=localhost en este pc
             cadena = "Server=dbonbreak.c3zq6eobr3dm.us-east-1.rds.amazonaws.com;Port=3306;Database=Onbreak;Uid=admin;Pwd=topolino123;;Convert Zero Datetime=true";
 
             conexion = new MySqlConnection(cadena);

@@ -17,5 +17,6 @@ namespace Negocio
         public string Nombre_evento { get; set; }
         public int Valor_base { get; set; }
         public int Personal_base { get; set; }
+        public string Descripcion { get; set; }
     }
 }

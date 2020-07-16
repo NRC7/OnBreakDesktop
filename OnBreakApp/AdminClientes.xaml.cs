@@ -127,7 +127,7 @@ namespace OnBreakApp
                 && ValidarFormatoRut(txtPhoneNumber.Text)
                 && new DbCrud().ActualizarCliente(txtRut.Text, txtName.Text,
                 txtLastName.Text, txtAddress.Text, txtPhoneNumber.Text,
-                txtEmail.Text, cbType.SelectedItem.ToString(), cbActividad.SelectedItem.ToString(), txtService.Text))
+                txtEmail.Text, cbType.SelectedItem.ToString(), cbActividad.SelectedItem.ToString()))
             {
                 NotifyUser(8);
             }
@@ -141,10 +141,10 @@ namespace OnBreakApp
         // CLICK BOTON GUARDAR CLIENTE
         private void Button_Click_Guardar(object sender, RoutedEventArgs e)
         {
-            if (ValidarCampos(txtRut.Text, txtName.Text, txtLastName.Text, txtAddress.Text, txtPhoneNumber.Text, txtEmail.Text, txtService.Text)
+            if (ValidarCampos(txtRut.Text, txtName.Text, txtLastName.Text, txtAddress.Text, txtPhoneNumber.Text, txtEmail.Text)
                 && cbType.SelectedItem != null && cbActividad.SelectedItem != null && ValidarFormatoRut(txtRut.Text))
             {
-                if (new DbCrud().GuardarCliente(txtRut.Text, txtName.Text, txtLastName.Text, txtAddress.Text, txtPhoneNumber.Text, txtEmail.Text, cbType.SelectedItem.ToString(), cbActividad.SelectedItem.ToString(), txtService.Text))
+                if (new DbCrud().GuardarCliente(txtRut.Text, txtName.Text, txtLastName.Text, txtAddress.Text, txtPhoneNumber.Text, txtEmail.Text, cbType.SelectedItem.ToString(), cbActividad.SelectedItem.ToString()))
                 {
 
                     NotifyUser(1);
@@ -183,10 +183,10 @@ namespace OnBreakApp
         }
 
         // Valida que todos los campos del formulario hayan sido completados al guardar un nuevo cliente
-        private bool ValidarCampos(string name, string lastName, string rut, string address, string phoneNumber, string email, string service)
+        private bool ValidarCampos(string name, string lastName, string rut, string address, string phoneNumber, string email)
         {
             if (name.Length > 0 && lastName.Length > 0 && rut.Length > 0 && address.Length > 0 &&
-                phoneNumber.Length > 0 && email.Length > 0 && service.Length > 0)
+                phoneNumber.Length > 0 && email.Length > 0 && email.Contains('@'))
             {
                 return true;
             }
@@ -199,7 +199,7 @@ namespace OnBreakApp
         // Valida que los datos ingresados en el campo sean distintos a los que tiene el cliente ingresado
         private Cliente ValidarCliente(Cliente cliente)
         {
-            if (cbType.SelectedItem != null && cbActividad.SelectedItem != null && ValidarFormatoRut(rut) && ValidarFormatoRut(telefono))
+            if (cbType.SelectedItem != null && cbActividad.SelectedItem != null && ValidarFormatoRut(txtPhoneNumber.Text))
             {
                 cliente.TipoEmpresa = cbType.SelectedItem.ToString();
             }
@@ -232,11 +232,6 @@ namespace OnBreakApp
             if (cliente.Email != txtEmail.Text && txtEmail.Text.Length > 0)
             {
                 cliente.Email = txtEmail.Text;
-            }
-
-            if (cliente.Servicio != txtService.Text && txtService.Text.Length > 0)
-            {
-                cliente.Servicio = txtService.Text;
             }
 
             return cliente;
@@ -278,7 +273,6 @@ namespace OnBreakApp
             txtAddress.Text = "";
             txtPhoneNumber.Text = "";
             txtEmail.Text = "";
-            txtService.Text = "";
             txtRutBuscar.Text = "";
         }
 
@@ -327,7 +321,6 @@ namespace OnBreakApp
             txtAddress.Text = cliente.Direccion;
             txtPhoneNumber.Text = cliente.Telefono;
             txtEmail.Text = cliente.Email;
-            txtService.Text = cliente.Servicio;
 
             PopularTipos(1, cbType);
             PopularTipos(2, cbActividad);
